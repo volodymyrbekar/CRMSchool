@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if student_obj %}
+
+<h1>Другий Дзвінок...</h1>
+
+<table class="table table-striped table-hover table-bordered table-sm" style="text-align: center;">
+  <thead>
+    <tr>
+      <th scope="col">ПІБ</th>
+      <th scope="col">Номер Телефону</th>
+        <th scope="col">Номер Телефону Батьків</th>
+        <th scope="col">Школа</th>
+        <th scope="col">Клас</th>
+        <th scope="col">Дата додавання</th>
+
+        <th scope="col">Перший дзвінок</th>
+        <th scope="col">Статус Першого Дзвінка</th>
+        <th scope="col">Реєстрація на пробне</th>
+        <th scope="col">Статус Пробного</th>
+        <th scope="col">Коментар Перший Дзвінок</th>
+
+        <th scope="col">Другий дзвінок</th>
+        <th scope="col">Статус Другого Дзвінка</th>
+        <th scope="col">Додати до групи</th>
+        <th scope="col">Коментар Другий Дзвінок</th>
+        <th scope="col"></th>
+
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+      {% if center_obj %}
+        {% for student in student_obj %}
+        <tr>
+          <td>{{ student.student_full_name }}</td>
+          <td>{{ student.student_phone_number }}</td>
+          <td>{{ student.parent_phone_number }}</td>
+            <td>{{ student.school }}</td>
+            <td>{{ student.class_number }}</td>
+            <td>{{ student.student_add_date}}</td>
+
+            <td>{{ student.first_call |default_if_none:""}}</td>
+            <td>{{ student.first_call_satus |default_if_none:""}}</td>
+            <td>{{ student.trial_registration |default_if_none:""}}</td>
+            <td>{{ student.trial_status|default_if_none:"" }}</td>
+            <td>{{ student.comment_first_call|default_if_none:"" }}</td>
+
+            <td>{{ student.second_call |default_if_none:""}}</td>
+            <td>{{ student.second_call_satus |default_if_none:""}}</td>
+            <td>{{ student.add_to_group |default_if_none:""}}</td>
+            <td>{{ student.comment_second_call |default_if_none:""}}</td>
+            <td><a href="#">
+            <button type="button" class="btn btn-link">Редагувати</button>
+          </a></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+{% else %}
+    <h2>Немає учнів для дзвінка</h2>
+
+{% endif %}
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <form action='/search/' method="GET" class="d-flex">
+        <select class="form-control" name="query" id="search">
+            {% if request.GET.type == 'centers' %}
+                <option value="centers" selected>Centers</option>
+            {% else %}
+                <option value="centers">Centers</option>
+            {% endif %}
+            <!-- Add options for other types if needed -->
+        </select>
+    </form>
+
+
+
+    <table class="table table-striped table-hover table-bordered table-sm">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Application Number</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% if centers %}
+                {% for center in centers %}
+                    <tr>
+                        <td><a href="{% url 'center' center.id %}">{{ center.id }}</a></td>
+                        <td>{{ center.center_name }}</td>
+                        <td>{{ center.location }}</td>
+                        <td>{{ center.applications_num }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4">No centers found</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

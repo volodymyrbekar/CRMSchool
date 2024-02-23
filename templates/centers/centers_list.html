@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+{% if user.is_authenticated %}
+
+  <h1>Навчальні Центри...</h1>
+
+  <table class="table table-striped table-hover table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">Повне Імʼя</th>
+      <th scope="col">Локація</th>
+      <th scope="col">Кількість учнів</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+      {% if centers %}
+        {% for center in centers %}
+        <tr>
+          <td><a href="{% url 'students_list' center.pk%}">{{ center.center_name }}</a></td>
+          <td>{{ center.location }}</td>
+          <td>{{ center.get_student_num }}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+  {% endif %}
+
+
+{% endblock %}
+

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-6 offsets-md-3">
+<h1>Додати Учня...</h1>
+    <br/>
+<form method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Oops!</strong> Your Form Has Errors
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {% endif %}
+    <p>{{ student.student_full_name}}</p>
+    <p>{{ student.student_phone_number}}</p>
+    <p>{{ student.parent_phone_number}}</p>
+    <p>{{ student.school|default_if_none:""}}</p>
+    <p>{{ student.class_number|default_if_none:""}}</p>
+    <p>{{ student.student_add_date|default_if_none:""}}</p>
+     </p><input type="hidden" name="center" value="{{ center.pk }}">
+    <p>Центр: <strong>{{ center }}</strong></p>
+    <p>{{ from.first_call }}</p>
+    <p>{{ form.first_call_satus }}</p>
+    <p>{{ form.trial_registration }}</p>
+    <p>{{ form.trial_status }}</p>
+    <p>{{ form.comment_first_call }}
+
+
+    <p><button type="submit" class="btn btn-primary">Додати Учня</button></p>
+    </div>
+</form>
+    </div>
+
+{% endblock content%}

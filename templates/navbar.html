@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'login' %}">WebSkill</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        {% if user.is_authenticated %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Create
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'create_center' %}">Створити центр</a></li>
+            <li><a class="dropdown-item" href="{%url 'create_group_trial' %}">Створити групу пробна </a></li>
+            <li><a class="dropdown-item" href="{%url 'create_group' %}">Створити групу постійна</a></li>
+          </ul>
+        </li>
+
+
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link" href="{% url 'create_center' %}">Create Center</a>-->
+<!--        </li>-->
+
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'centers_list' %}">Центри</a>
+        </li>
+
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+
+          {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

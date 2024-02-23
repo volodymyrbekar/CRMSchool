@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<h3 style="color:blue;">{{ center_obj.center_name }} - {{ center_obj.location }}</h3>
+<div class="d-flex flex-row-reverse">
+
+
+<!--  Дропдаун груп на пробне -->
+  <div class="btn-group">
+  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Групи - пробне
+  </button>
+  <ul class="dropdown-menu">
+       {% for group in group_trial_obj %}
+        <li><a class="dropdown-item" href="{% url 'group_detail_trial' group.id %}">{{ group.group_name }}</a></li>
+            {% endfor %}
+       </ul>
+  </div>
+
+
+<!-- Дропдаун груп на постійне -->
+    <div class="btn-group">
+  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Групи - постійне
+  </button>
+  <ul class="dropdown-menu">
+       {% for group in group_obj %}
+        <li><a class="dropdown-item" href="{% url 'group_detail' group.id %}">{{ group.group_name }}</a></li>
+            {% endfor %}
+       </ul>
+  </div>
+
+    <!-- Дропдаун Дзвінки -->
+ <div class="btn-group">
+  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Дзвінки
+  </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{% url 'first_call' center_obj.id %}">Перший Дзвінок</a></li>
+        <li><a class="dropdown-item" href="{% url 'second_call' center_obj.id %}">Другий Дзвінок</a></li>
+    </ul>
+</div>
+
+
+
+    <a href="{% url 'create_student' pk=center_obj.id%}">
+      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
+    </a>
+</div>
+
+ <h1>Всі Учні...</h1>
+
+<table class="table table-striped table-hover table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">ПІБ</th>
+      <th scope="col">Номер Телефону</th>
+        <th scope="col">Номер Телефону Батьків</th>
+        <th scope="col">Школа</th>
+        <th scope="col">Клас</th>
+        <th scope="col">Дата додавання</th>
+
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+      {% if center_obj %}
+        {% for student in student_obj %}
+        <tr>
+          <td>{{ student.student_full_name }}</td>
+          <td>{{ student.student_phone_number }}</td>
+          <td>{{ student.parent_phone_number }}</td>
+            <td>{{ student.school }}</td>
+            <td>{{ student.class_number }}</td>
+            <td>{{ student.student_add_date }}</td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+    </tbody>
+  </table>
+
+
+{% endif %}
+{% endblock content %}
