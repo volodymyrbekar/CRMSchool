@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if  center_obj %}
+
 {% if user.is_authenticated %}
 
 <h3 style="color:blue;">{{ center_obj.center_name }} - {{ center_obj.location }}</h3>
 <div class="d-flex flex-row-reverse">
 
+<!--  Додати учня -->
+    <a href="{% url 'create_student' pk=center_obj.id%}">
+      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
+    </a>
+</div>
 
-<!--  Дропдаун груп на пробне -->
+
+{% if  student_obj %}
+
   <div class="btn-group">
   <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
     Групи - пробне
@@ -44,13 +53,8 @@
 </div>
 
 
-
-    <a href="{% url 'create_student' pk=center_obj.id%}">
-      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
-    </a>
-</div>
-
  <h1>Всі Учні...</h1>
+
 
 <table class="table table-striped table-hover table-bordered table-sm">
   <thead>
@@ -80,6 +84,15 @@
     </tbody>
   </table>
 
+{% else %}
+    <h2>Немає учнів. Будь ласка додайте учнів!</h2>
+
+ {% endif %}
+ {% endif %}
+
 
 {% endif %}
+
+
+
 {% endblock content %}

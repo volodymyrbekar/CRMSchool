@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  postgres:
+    image: postgres:16.1-alpine
+    ports:
+        - "5432:5432"
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  pgweb:
+    container_name: pgweb
+    image: sosedoff/pgweb
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+    depends_on:
+      - postgres
+    restart: on-failure

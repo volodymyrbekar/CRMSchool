@@ -22,27 +22,26 @@
         <th scope="col">Статус Пробного</th>
         <th scope="col">Коментар</th>
         <th scope="col"></th>
-
     </tr>
   </thead>
   <tbody class="table-group-divider">
       {% if center_obj %}
         {% for student in student_obj %}
         <tr>
-          <td>{{ student.student_full_name}}</td>
-          <td>{{ student.student_phone_number}}</td>
-          <td>{{ student.parent_phone_number}}</td>
+            <td>{{ student.student_full_name}}</td>
+            <td>{{ student.student_phone_number}}</td>
+            <td>{{ student.parent_phone_number}}</td>
             <td>{{ student.school|default_if_none:""}}</td>
             <td>{{ student.class_number|default_if_none:""}}</td>
             <td>{{ student.student_add_date|default_if_none:""}}</td>
             <td>{{ student.first_call|default_if_none:""}}</td>
-            <td>{{ student.first_call_satus |default_if_none:""}}</td>
+            <td>{{ student.first_call_satus|default_if_none:""}}</td>
             <td>{{ student.trial_registration|default_if_none:""}}</td>
             <td>{{ student.trial_status|default_if_none:""}}</td>
             <td>{{ student.comment_first_call|default_if_none:""}}</td>
-          <td><a href="{% url 'student_update' student_obj.id %}">
-            <button type="button" class="btn btn-link">Редагувати</button>
-          </a>
+            <td>
+            <a href="{% url 'student_update' pk=student.pk %}">
+            <button type="button" class="btn btn-link">Редагувати</button></a>
           </td>
         </tr>
         {% endfor %}

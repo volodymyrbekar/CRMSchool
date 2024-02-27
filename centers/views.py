@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm
+from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm
 from .models import Center, Student, GroupTrial, Group
 
 
@@ -22,22 +22,6 @@ def centers_list_view(request):
         'centers': centers_obj,
     }
     return render(request, 'centers/centers_list.html', context)  # This is the file that will be rendered
-
-
-# @login_required
-# def center_detail_view(request, pk):
-#     # center_obj = None
-#     try:
-#         center_obj = Center.objects.get(id=pk)
-#     except Center.DoesNotExist:
-#         raise Http404("Center does not exist")
-#     except Center.MultipleObjectsReturned:
-#         center_obj = Center.objects.filter(id=pk).first()
-#     context = {
-#         'center_obj': center_obj
-#     }
-#     # return redirect('students_list')
-#     return render(request, 'students/students_list.html', context)
 
 
 @login_required
@@ -101,18 +85,27 @@ def create_student_view(request, pk):
 
 @login_required
 def student_update_view(request, pk):
-    student_obj = Student.objects.get(student_id=pk)
-    form = CreateStudentForm(request.POST or None, instance=student_obj)
-    context = {
-        'form': form,
-        'student_obj': student_obj,
-    }
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Учень успішно оновлений')
-    return render(request, 'students/first_call_student_edit.html', context)
+    try:
+        student = get_object_or_404(Student, id=pk)
+        form = UpdateStudentForm(instance=student)
 
+        if request.method == 'POST':
+            form = UpdateStudentForm(request.POST or None, instance=student)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Учень успішно оновлений')
+                # return redirect('first_call')
+            else:
+                print(form.errors)
+                messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
+        context = {
+            'form': form,
+            'student_obj': student,
+        }
+        return render(request, 'students/first_call_student_update.html', context)
+    except Student.DoesNotExist:
+        messages.error(request, "Студент із зазначеним id не знайдений")
+        return redirect('first_call')
 
 
 @login_required
@@ -130,6 +123,19 @@ def create_group_trial_view(request):
     return render(request, 'groups/create_group_trial.html', context)
 
 
+def group_detail_trial_view(request, pk):
+    try:
+        group_trial_obj = GroupTrial.objects.get(pk=pk)
+    except GroupTrial.DoesNotExist:
+        raise Http404("Group does not exist")
+    student_obj = Student.objects.filter(center_id=pk).all()
+    context = {
+        'group_trial_obj': group_trial_obj,
+        'student_obj': student_obj,
+    }
+    return render(request, 'groups/group_detail_trial.html', context)
+
+
 @login_required
 def create_group(request):
     form = CreateGroupForm(request.POST or None)
@@ -144,18 +150,6 @@ def create_group(request):
             return redirect('centers_list')
     return render(request, 'groups/create_group_permanent.html', context)
 
-
-def group_detail_trial_view(request, pk):
-    try:
-        group_trial_obj = GroupTrial.objects.get(pk=pk)
-    except GroupTrial.DoesNotExist:
-        raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center_id=pk).all()
-    context = {
-        'group_trial_obj': group_trial_obj,
-        'student_obj': student_obj,
-    }
-    return render(request, 'groups/group_detail_trial.html', context)
 
 
 def group_detail_view(request, pk):

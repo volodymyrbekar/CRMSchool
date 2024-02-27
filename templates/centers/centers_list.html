@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if  centers %}
+
 
 {% if user.is_authenticated %}
 
@@ -28,6 +30,10 @@
   </table>
 
   {% endif %}
+ {% else %}
+    <h2>Немає жодного центру. Будь ласка створіть новий центр!</h2>
+
+ {% endif %}
 
 
 {% endblock %}
