@@ -14,5 +14,6 @@ urlpatterns = [
     path('group/<int:pk>/', views.group_detail_view, name='group_detail'),
     path('centers/<int:pk>/first-call/', views.first_call_view, name='first_call'),
     path('centers/<int:pk>/second-call/', views.second_call_view, name='second_call'),
-    path('first-call/update/<int:pk>/', views.student_update_view, name='student_update'),
+    path('first-call/update/<int:pk>/', views.first_call_student_update_view, name='student_update'),
+    path('second-call/update/<int:pk>/', views.second_call_student_update_view, name='student_update_second'),
 ]

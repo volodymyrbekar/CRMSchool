@@ -1,6 +1,6 @@
 from django import forms
 from .models import Center, Student, GroupTrial, Group
-from .choices import CHOICES_FIRST_CALL_OPERATOR, CHOICES_FIRST_CALL_STATUS, CHOICES_TRIAL_STATUS
+from .choices import CHOICES_FIRST_CALL_OPERATOR, CHOICES_FIRST_CALL_STATUS, CHOICES_SECOND_CALL_STATUS, CHOICES_TRIAL_STATUS
 
 
 class CreateCenterForm(forms.ModelForm):
@@ -79,11 +79,6 @@ class UpdateStudentForm(forms.ModelForm):
     trial_status = forms.ChoiceField(choices=CHOICES_TRIAL_STATUS, widget=forms.Select(attrs={'class': 'form-control'}),label="")
     comment_first_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
 
-    second_call = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'}), label="")
-    second_call_satus = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'}), label="")
-    add_to_group = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add To Group'}), label="")
-    comment_second_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
-
     def __init__(self, *args, **kwargs):
         super(UpdateStudentForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
@@ -94,6 +89,23 @@ class UpdateStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = '__all__'
+
+
+class UpdateStudentSecondForm(forms.ModelForm):
+    second_call = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'}), label="")
+    second_call_satus = forms.ChoiceField(choices=CHOICES_SECOND_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'}), label="")
+    add_to_group = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Add To Group'}), label="")
+    comment_second_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
+        self.fields.pop('center')
+        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
+
+    class Meta:
+        model = Student
+        fields = '__all__'
+
 
 
 class CreateGroupTrialForm(forms.ModelForm):

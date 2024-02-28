@@ -4,7 +4,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm
+from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, Group
 
 
@@ -84,29 +84,51 @@ def create_student_view(request, pk):
 
 
 @login_required
-def student_update_view(request, pk):
+def first_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
         form = UpdateStudentForm(instance=student)
-
+        context = {
+            'form': form,
+            'student_obj': student,
+        }
         if request.method == 'POST':
             form = UpdateStudentForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Учень успішно оновлений')
-                # return redirect('first_call')
+                return redirect('first_call', pk=student.center.pk)
             else:
-                print(form.errors)
+                # print(form.errors)
                 messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
+        return render(request, 'students/first_call_student_update.html', context)
+    except Student.DoesNotExist:
+        messages.error(request, "Студент із зазначеним id не знайдений")
+        return redirect('centers_list')
+
+
+@login_required
+def second_call_student_update_view(request, pk):
+    try:
+        student = get_object_or_404(Student, id=pk)
+        form = UpdateStudentSecondForm(instance=student)
         context = {
             'form': form,
             'student_obj': student,
         }
-        return render(request, 'students/first_call_student_update.html', context)
+        if request.method == 'POST':
+            form = UpdateStudentSecondForm(request.POST or None, instance=student)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Учень успішно оновлений')
+                return redirect('second_call', pk=student.center.pk)
+            else:
+                # print(form.errors)
+                messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
+        return render(request, 'students/second_call_student_update.html', context)
     except Student.DoesNotExist:
         messages.error(request, "Студент із зазначеним id не знайдений")
-        return redirect('first_call')
-
+        return redirect('centers_list')
 
 @login_required
 def create_group_trial_view(request):
