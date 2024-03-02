@@ -5,7 +5,7 @@
 {% if student_obj %}
 
 
-<h1>{% 'group_trial_obj.group_name' %}...</h1>
+<h1>{{group_trial_obj.group_name}}</h1>
 
 
 <table class="table table-striped table-hover table-bordered table-sm">
@@ -37,6 +37,10 @@
     </tbody>
   </table>
 
+
+{% else %}
+
+    <h2>Немає учнів</h2>
 
 {% endif %}
 {% endif %}

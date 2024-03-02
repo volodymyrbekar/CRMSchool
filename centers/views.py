@@ -8,14 +8,6 @@ from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, Cr
 from .models import Center, Student, GroupTrial, Group
 
 
-# def get_center_id(request):
-#     qs = Student.objects.filter('center_id').all().coutn()
-#     # center_id = request.GET.get('center_id')
-#     # if center_id:
-#     #     center_obj = Center.objects.get(id=center_id)
-#     return qs
-
-
 def centers_list_view(request):
     centers_obj = Center.objects.all()
     context = {
@@ -173,7 +165,6 @@ def create_group(request):
     return render(request, 'groups/create_group_permanent.html', context)
 
 
-
 def group_detail_view(request, pk):
     try:
         group_obj = Group.objects.get(pk=pk)
@@ -182,7 +173,7 @@ def group_detail_view(request, pk):
     context = {
         'group_obj': group_obj,
     }
-    return render(request, 'groups/group_detail.html', context)
+    return render(request, 'groups/group_detail_permanent.html', context)
 
 
 def first_call_view(request, pk):

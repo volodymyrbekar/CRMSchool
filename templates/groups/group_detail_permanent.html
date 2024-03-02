@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if student_obj %}
+<h1>{{group_obj.group_name}}</h1>
+
+
+{% else %}
+
+    <h2>Немає учнів</h2>
+
+{% endif %}
+{% endif %}
+{% endblock content %}
