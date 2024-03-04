@@ -24,9 +24,6 @@ class GroupTrial(models.Model):
     center = models.ForeignKey(Center, on_delete=models.CASCADE)
     group_name = models.CharField(max_length=100)
 
-    def get_group_trial(self):
-        return self.group_trial_set.all()
-
     def __str__(self):
         return(f"{self.group_name}")
 

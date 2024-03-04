@@ -53,7 +53,6 @@ def student_list_view(request, pk):
         'group_obj': group_obj,
 
     }
-
     return render(request, 'students/students_list.html', context)
 
 
@@ -140,9 +139,10 @@ def create_group_trial_view(request):
 def group_detail_trial_view(request, pk):
     try:
         group_trial_obj = GroupTrial.objects.get(pk=pk)
+        center = group_trial_obj.center
     except GroupTrial.DoesNotExist:
         raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center_id=pk).all()
+    student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj)
     context = {
         'group_trial_obj': group_trial_obj,
         'student_obj': student_obj,
@@ -168,10 +168,13 @@ def create_group(request):
 def group_detail_view(request, pk):
     try:
         group_obj = Group.objects.get(pk=pk)
+        center = group_obj.center
     except Group.DoesNotExist:
         raise Http404("Group does not exist")
+    student_obj = Student.objects.filter(center=center, add_to_group=group_obj)
     context = {
         'group_obj': group_obj,
+        'student_obj': student_obj,
     }
     return render(request, 'groups/group_detail_permanent.html', context)
 
@@ -192,7 +195,7 @@ def first_call_view(request, pk):
 def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        student_obj = Student.objects.filter(center_id=pk).all()
+        student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').all()
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
     context = {

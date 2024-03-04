@@ -3,11 +3,39 @@
 
 {% if user.is_authenticated %}
 {% if student_obj %}
+
 <h1>{{group_obj.group_name}}</h1>
 
+<div class="d-flex flex-row-reverse">
 
+<table class="table table-striped table-hover table-bordered table-sm">
+  <thead>
+    <tr>
+      <th scope="col">ПІБ</th>
+      <th scope="col">Номер Телефону</th>
+        <th scope="col">Номер Телефону Батьків</th>
+        <th scope="col">Школа</th>
+        <th scope="col">Клас</th>
+        <th scope="col">Дата додавання</th>
+        <th scope="col"></th>
+
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+        {% for student in student_obj %}
+        <tr>
+          <td>{{ student.student_full_name }}</td>
+          <td>{{ student.student_phone_number }}</td>
+          <td>{{ student.parent_phone_number }}</td>
+            <td>{{ student.school }}</td>
+            <td>{{ student.class_number }}</td>
+            <td>{{ student.student_add_date }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% else %}
-
     <h2>Немає учнів</h2>
 
 {% endif %}
