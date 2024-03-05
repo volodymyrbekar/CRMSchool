@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 
 from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm, UpdateStudentSecondForm
-from .models import Center, Student, GroupTrial, Group
+from .models import Center, Student, GroupTrial, GroupPermanent
 
 
 def centers_list_view(request):
@@ -45,7 +45,7 @@ def student_list_view(request, pk):
         raise Http404("Center does not exist")
     student_obj = Student.objects.filter(center_id=pk).all()
     group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
-    group_obj = Group.objects.filter(center_id=pk).all()
+    group_obj = GroupPermanent.objects.filter(center_id=pk).all()
     context = {
         'student_obj': student_obj,
         'center_obj': center_obj,
@@ -167,9 +167,9 @@ def create_group(request):
 
 def group_detail_view(request, pk):
     try:
-        group_obj = Group.objects.get(pk=pk)
+        group_obj = GroupPermanent.objects.get(pk=pk)
         center = group_obj.center
-    except Group.DoesNotExist:
+    except GroupPermanent.DoesNotExist:
         raise Http404("Group does not exist")
     student_obj = Student.objects.filter(center=center, add_to_group=group_obj)
     context = {

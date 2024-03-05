@@ -1,5 +1,5 @@
 from django import forms
-from .models import Center, Student, GroupTrial, Group
+from .models import Center, Student, GroupTrial, GroupPermanent
 from .choices import CHOICES_FIRST_CALL_OPERATOR, CHOICES_FIRST_CALL_STATUS, CHOICES_SECOND_CALL_STATUS, CHOICES_TRIAL_STATUS
 
 
@@ -100,12 +100,11 @@ class UpdateStudentSecondForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
+        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=GroupPermanent.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
 
     class Meta:
         model = Student
         fields = '__all__'
-
 
 
 class CreateGroupTrialForm(forms.ModelForm):
@@ -126,17 +125,17 @@ class CreateGroupTrialForm(forms.ModelForm):
 
 
 class CreateGroupForm(forms.ModelForm):
-    group_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group Name'}), label="")
+    group_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва Групи'}), label="")
     center = forms.ModelChoiceField(queryset=Center.objects.all(), to_field_name='center_name', widget=forms.Select(attrs={'class': 'form-control'}), label="")
 
     class Meta:
-        model = Group
+        model = GroupPermanent
         fields = ['group_name', 'center']
 
     def clean(self):
         data = self.cleaned_data
         group_name = data.get('group_name')
-        qs = Group.objects.filter(group_name__icontains=group_name)
+        qs = GroupPermanent.objects.filter(group_name__icontains=group_name)
         if qs.exists():
             self.add_error("group_name", f'\"{group_name}\" already in use.')
         return data

@@ -28,7 +28,7 @@ class GroupTrial(models.Model):
         return(f"{self.group_name}")
 
 
-class Group(models.Model):
+class GroupPermanent(models.Model):
     center = models.ForeignKey(Center, on_delete=models.CASCADE)
     group_name = models.CharField(max_length=100)
 

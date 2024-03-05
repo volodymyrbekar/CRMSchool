@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from .models import Center, Student, GroupTrial, Group
+from .models import Center, Student, GroupTrial, GroupPermanent
 
 
 User = get_user_model()
@@ -29,6 +29,6 @@ class GroupAdmin(admin.ModelAdmin):
 
 admin.site.register(Center, CenterAdmin)
 admin.site.register(Student, StudentAdmin)
-admin.site.register(Group, GroupAdmin)
+admin.site.register(GroupPermanent, GroupAdmin)
 admin.site.register(GroupTrial, GroupTrialAdmin)
 
