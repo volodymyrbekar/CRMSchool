@@ -1,5 +1,22 @@
 from pathlib import Path
 import os
+import logging
+from logging.handlers import RotatingFileHandler
+
+
+LOG_FILENAME = 'django.log'
+
+logging.basicConfig(
+    filename=LOG_FILENAME,
+    level=logging.ERROR,  # або logging.DEBUG для отримання докладніших журналів
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+handler = RotatingFileHandler(
+    LOG_FILENAME,
+    maxBytes=10*1024*1024,  # 10 MB
+    backupCount=5
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,6 +36,8 @@ ALLOWED_HOSTS = []
 if not DEBUG:
     ALLOWED_HOSTS += [os.environ.get('ALLOWED_HOSTS')]
 
+
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Application definition
 
@@ -85,18 +104,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 

@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
-
+{% if user.is_authenticated %}
     <h1>Welcome to WebSkill</h1>
-    <br/>
 
+{%else%}
+<h1>Welcome to WebSkill</h1>
+<br/>
 <h4>Щоб продовжити будь ласка залогіньтесь!!!</h4>
 
-
+{% endif %}
 
 {% endblock %}

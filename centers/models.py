@@ -8,7 +8,6 @@ User = settings.AUTH_USER_MODEL
 
 
 class Center(models.Model):
-    # user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     center_name = models.CharField(max_length=300)
     location = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -56,30 +55,7 @@ class Student(models.Model):
     add_to_group = models.CharField(max_length=100, blank=True, null=True)
     comment_second_call = models.CharField(max_length=250, blank=True, null=True)
 
-    # def clean_fields(self, exclude=None):
-    #     for field in self._meta.fields:
-    #         value = getattr(self, field.attname)
-    #         if value is None:
-    #             setattr(self, field.attname, '')
-    #     super().clean_fields(exclude=exclude)
-
 
     def __str__(self):
         return(f"{self.student_full_name} {self.student_phone_number} {self.parent_phone_number} {self.school}")
 
-
-
-# class CenterQuerySet(models.QuerySet):
-#     def search(self, query=None):
-#         if query is None or query == "":
-#             return self.none()
-#         lookups = Q(center_name__icontains=query) | Q(location__icontains=query)
-#         return self.filter(lookups)
-#
-#
-# class CenterManager(models.Manager):
-#     def get_queryset(self):
-#         return CenterQuerySet(self.model, using=self._db)
-#
-#     def search(self, query=None):
-#         return self.get_queryset().search(query=query)

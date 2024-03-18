@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.http import Http404
-from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, GroupPermanent
 
 
+@login_required
 def centers_list_view(request):
     centers_obj = Center.objects.all()
     context = {
@@ -17,7 +18,10 @@ def centers_list_view(request):
 
 
 @login_required
+@permission_required('users.can_add_centers', raise_exception=True)
 def create_center_view(request):
+    # if not request.user.has_perm('users.centers'):
+    #     raise PermissionDenied("You do not have permission to create a center")
     form = CreateCenterForm(request.POST or None)
     context = {'form': form}
     if request.method == 'POST':
@@ -29,16 +33,9 @@ def create_center_view(request):
     return render(request, 'centers/create_center.html', context)
 
 
-def center_search_view(request):
-    query = request.GET.get('q')
-    qs = Center.objects.search(query=query)
-    context = {
-        'object': qs
-    }
-    return render(request, 'search/search_result.html', context=context)
-
-
+@login_required
 def student_list_view(request, pk):
+    print(request.user.__dict__)
     try:
         center_obj = Center.objects.get(pk=pk)
     except Center.DoesNotExist:
@@ -57,6 +54,7 @@ def student_list_view(request, pk):
 
 
 @login_required
+@permission_required('users.can_add_students', raise_exception=True)
 def create_student_view(request, pk):
     center = Center.objects.get(pk=pk)
     form = CreateStudentForm(request.POST or None, initial={'center': pk})
@@ -75,6 +73,7 @@ def create_student_view(request, pk):
 
 
 @login_required
+@permission_required('users.can_edit_first_call', raise_exception=True)
 def first_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
@@ -99,6 +98,7 @@ def first_call_student_update_view(request, pk):
 
 
 @login_required
+@permission_required('users.can_edit_second_call', raise_exception=True)
 def second_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
@@ -121,7 +121,9 @@ def second_call_student_update_view(request, pk):
         messages.error(request, "Студент із зазначеним id не знайдений")
         return redirect('centers_list')
 
+
 @login_required
+@permission_required('users.can_add_grouptrial', raise_exception=True)
 def create_group_trial_view(request):
     form = CreateGroupTrialForm(request.POST or None)
     context = {
@@ -136,6 +138,7 @@ def create_group_trial_view(request):
     return render(request, 'groups/create_group_trial.html', context)
 
 
+@login_required
 def group_detail_trial_view(request, pk):
     try:
         group_trial_obj = GroupTrial.objects.get(pk=pk)
@@ -151,7 +154,9 @@ def group_detail_trial_view(request, pk):
 
 
 @login_required
+@permission_required('users.can_add_grouppermanent', raise_exception=True)
 def create_group(request):
+
     form = CreateGroupForm(request.POST or None)
     context = {
         'form': form
@@ -165,6 +170,7 @@ def create_group(request):
     return render(request, 'groups/create_group_permanent.html', context)
 
 
+@login_required
 def group_detail_view(request, pk):
     try:
         group_obj = GroupPermanent.objects.get(pk=pk)
@@ -179,6 +185,7 @@ def group_detail_view(request, pk):
     return render(request, 'groups/group_detail_permanent.html', context)
 
 
+@login_required
 def first_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
@@ -192,6 +199,7 @@ def first_call_view(request, pk):
     return render(request, 'students/first_call.html', context)
 
 
+@login_required
 def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)

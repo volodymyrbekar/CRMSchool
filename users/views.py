@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .forms import SignUpForm
+# from .forms import SignUpForm
 
 
 def home_view(request):
@@ -13,7 +13,6 @@ def login_user_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        # Authenticate the user
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)

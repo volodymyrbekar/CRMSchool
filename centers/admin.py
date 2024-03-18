@@ -29,6 +29,6 @@ class GroupAdmin(admin.ModelAdmin):
 
 admin.site.register(Center, CenterAdmin)
 admin.site.register(Student, StudentAdmin)
-admin.site.register(GroupPermanent, GroupAdmin)
-admin.site.register(GroupTrial, GroupTrialAdmin)
+admin.site.register(GroupPermanent)
+admin.site.register(GroupTrial)
 
