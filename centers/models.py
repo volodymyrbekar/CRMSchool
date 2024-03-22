@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import Q
 from django.conf import settings
 
-from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_TRIAL_STATUS, CHOICES_FIRST_CALL_OPERATOR
+from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_TRIAL_STATUS
 
 User = settings.AUTH_USER_MODEL
 
@@ -44,7 +44,7 @@ class Student(models.Model):
     class_number = models.PositiveIntegerField(default=1, choices=((i, i) for i in range(1, 12)))
     student_add_date = models.DateTimeField(auto_now_add=True)
 
-    first_call = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_OPERATOR)
+    first_call = models.CharField(max_length=80, blank=True, null=True)
     first_call_satus = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_STATUS)
     trial_registration = models.CharField(max_length=80, blank=True, null=True)  # trial_registration запис на пробне
     trial_status = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_TRIAL_STATUS)  # чи був на пробному?

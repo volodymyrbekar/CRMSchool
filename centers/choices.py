@@ -22,12 +22,6 @@ CHOICES_SECOND_CALL_STATUS = (
 )
 
 
-CHOICES_FIRST_CALL_OPERATOR = (
-    ('Юля', 'Юля'),
-    ('Анна', 'Анна'),
-    ('Богдан', 'Богдан'),
-)
-
 CHOICES_TRIAL_STATUS = (
     (" ", " "),
     ('Так, був на пробному', 'Так, був на пробному'),

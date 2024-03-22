@@ -4,8 +4,9 @@ from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
 
-from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentForm, UpdateStudentSecondForm
+from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentFirstForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, GroupPermanent
+from users.models import CustomUser
 
 
 @login_required
@@ -77,13 +78,13 @@ def create_student_view(request, pk):
 def first_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
-        form = UpdateStudentForm(instance=student)
+        form = UpdateStudentFirstForm(instance=student)
         context = {
             'form': form,
             'student_obj': student,
         }
         if request.method == 'POST':
-            form = UpdateStudentForm(request.POST or None, instance=student)
+            form = UpdateStudentFirstForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Учень успішно оновлений')

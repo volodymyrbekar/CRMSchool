@@ -19,8 +19,6 @@ class CustomUser(AbstractUser):
     groups = models.ManyToManyField(Group, blank=True, related_name="customuser_set")
     user_permissions = models.ManyToManyField(Permission, blank=True, related_name="customuser_set")
 
-    def get_user_set(self):
-        return self.user_set.all()
 
     def save(self, *args, **kwargs):
         super(CustomUser, self).save(*args, **kwargs)
