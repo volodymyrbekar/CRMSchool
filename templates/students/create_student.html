@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% for name, url in breadcrumbs %}
+    <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+    {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
+{% endfor %}
+
 <div class="col-md-6 offsets-md-3">
 <h1>Додати Учня...</h1>
     <br/>

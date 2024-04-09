@@ -23,7 +23,6 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        print('assdfsdfsdfsdfsdfsdfd')
         super().save_model(request, obj, form, change)
         obj.user_permissions.clear()  # clear all permissions
 

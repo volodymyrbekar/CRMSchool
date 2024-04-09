@@ -5,8 +5,8 @@ from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_SECOND_CALL_STATUS, CHOI
 
 
 class CreateCenterForm(forms.ModelForm):
-    center_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Center Name'}), label="")
-    location = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Location'}), label="")
+    center_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва центру'}), label="")
+    location = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Локація'}), label="")
 
     class Meta:
         model = Center
@@ -123,7 +123,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
 
 
 class CreateGroupTrialForm(forms.ModelForm):
-    group_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Group Name'}), label="")
+    group_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва Групи'}), label="")
     center = forms.ModelChoiceField(queryset=Center.objects.all(), to_field_name='center_name', widget=forms.Select(attrs={'class': 'form-control'}), label="")
 
     class Meta:

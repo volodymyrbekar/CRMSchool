@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="col-md-6 offsets-md-3">
-<h1>Створити Постійну Групу</h1>
+<h1>Створити Постійну групу</h1>
     <br/>
 <form method="post" action="{% url 'create_group' %}">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary">Create Group</button>
+    <button type="submit" class="btn btn-primary">Створити Групу</button>
 </form>
 </div>
 

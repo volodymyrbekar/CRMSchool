@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
@@ -24,7 +24,13 @@ def create_center_view(request):
     # if not request.user.has_perm('users.centers'):
     #     raise PermissionDenied("You do not have permission to create a center")
     form = CreateCenterForm(request.POST or None)
-    context = {'form': form}
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+    ]
+    context = {'form': form,
+               'breadcrumbs': breadcrumbs,
+               }
     if request.method == 'POST':
         if form.is_valid():
             create_center = form.save()
@@ -42,10 +48,15 @@ def student_list_view(request, pk):
     except Center.DoesNotExist:
         raise Http404("Center does not exist")
     student_obj = Student.objects.filter(center_id=pk).all()
+
+    paginator = Paginator(student_obj, 50)  # Show 10 students per page
+    page_number = request.GET.get('page')
+    student_obj_page = paginator.get_page(page_number)
+
     group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
     group_obj = GroupPermanent.objects.filter(center_id=pk).all()
     context = {
-        'student_obj': student_obj,
+        'student_obj_page': student_obj_page,
         'center_obj': center_obj,
         'group_trial_obj': group_trial_obj,
         'group_obj': group_obj,
@@ -59,10 +70,19 @@ def student_list_view(request, pk):
 def create_student_view(request, pk):
     center = Center.objects.get(pk=pk)
     form = CreateStudentForm(request.POST or None, initial={'center': pk})
+
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+        (center.center_name, f'/centers/{center.id}/students'),  # Current center page
+        ('Додати учня', request.path),  # Current page
+    ]
+
     context = {
         'form': form,
         'center': center,
         'pk': pk,
+        'breadcrumbs': breadcrumbs,
     }
     if request.method == 'POST':
         if form.is_valid():
@@ -147,9 +167,16 @@ def group_detail_trial_view(request, pk):
     except GroupTrial.DoesNotExist:
         raise Http404("Group does not exist")
     student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj)
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+        (center.center_name, f'/centers/{center.id}/students'),  # Current center page
+        (group_trial_obj.group_name, request.path),  # Current page
+    ]
     context = {
         'group_trial_obj': group_trial_obj,
         'student_obj': student_obj,
+        'breadcrumbs': breadcrumbs,
     }
     return render(request, 'groups/group_detail_trial.html', context)
 
@@ -179,9 +206,16 @@ def group_detail_view(request, pk):
     except GroupPermanent.DoesNotExist:
         raise Http404("Group does not exist")
     student_obj = Student.objects.filter(center=center, add_to_group=group_obj)
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+        (center.center_name, f'/centers/{center.id}/students'),  # Current center page
+        (group_obj.group_name, request.path),  # Current page
+    ]
     context = {
         'group_obj': group_obj,
         'student_obj': student_obj,
+        'breadcrumbs': breadcrumbs,
     }
     return render(request, 'groups/group_detail_permanent.html', context)
 
@@ -191,11 +225,22 @@ def first_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
         student_obj = Student.objects.filter(center_id=pk).all()
+        operators = CustomUser.objects.filter(role='operator')
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
+
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+        (center_obj.center_name, f'/centers/{center_obj.id}/students'),  # Current center page
+        ('Перший дзвінок', request.path),  # Current page
+    ]
+
     context = {
-        'center_obj': center_obj,
         'student_obj': student_obj,
+        'center_obj': center_obj,
+        'operators': operators,
+        'breadcrumbs': breadcrumbs,
     }
     return render(request, 'students/first_call.html', context)
 
@@ -205,10 +250,21 @@ def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
         student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').all()
+        operators = CustomUser.objects.filter(role='operator')
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
+
+    breadcrumbs = [
+        ('Головна', '/'),  # Home page
+        ('Центри', '/centers/'),  # Centers list page
+        (center_obj.center_name, f'/centers/{center_obj.id}/students'),  # Current center page
+        ('Другий дзвінок', request.path),  # Current page
+    ]
+
     context = {
         'center_obj': center_obj,
         'student_obj': student_obj,
+        'operators': operators,
+        'breadcrumbs': breadcrumbs,
     }
     return render(request, 'students/second_call.html', context)
