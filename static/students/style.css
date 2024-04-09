@@ -57,13 +57,13 @@ table {
 th, td {
     padding: 15px;
     text-align: center;
+    vertical-align: middle;
     border-bottom: 1px solid #000000;
     border: 1px solid #007BFF;
 }
 
 th {
-   background-color: #007BFF; /* Change the background color to blue */
-   color: white;
+   background-color: #6692ea /* Change the background color to blue */
    border: 10px solid #007BFF;
    font-weight: bold;
 
@@ -80,3 +80,33 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #6692ea; /* Change the hover color to a lighter blue */
 }
+
+
+.first-call-row td:nth-child(-n+6) {
+    background-color: #f5f5f5;
+}
+
+.first-call-row td:nth-child(n+7) {
+    background-color: #d6ffff;
+}
+
+.first-call-row td:last-child {
+    background-color: white;
+}
+
+.second-call-row td:nth-child(-n+6) {
+    background-color: #f5f5f5;
+}
+
+.second-call-row td:nth-child(n+7):nth-child(-n+11) {
+    background-color: #d6ffff;
+}
+
+.second-call-row td:nth-last-child(-n+5) {
+    background-color: #EAFFE1;
+}
+
+.second-call-row td:last-child {
+    background-color: white;
+}
+data-operator-id="{{ student.second_call.id }}" class="operator-row"

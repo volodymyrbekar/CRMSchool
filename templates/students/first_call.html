@@ -42,7 +42,7 @@
   <tbody class="table-group-divider">
       {% if center_obj %}
         {% for student in student_obj %}
-        <tr data-first-call="{{ operator.id }}" class="operator-row">
+        <tr data-first-call="{{ operator.id }}" class="operator-row first-call-row">
             <td>{{ student.student_full_name}}</td>
             <td>{{ student.student_phone_number}}</td>
             <td>{{ student.parent_phone_number}}</td>

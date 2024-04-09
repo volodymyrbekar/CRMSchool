@@ -47,7 +47,7 @@ def student_list_view(request, pk):
         center_obj = Center.objects.get(pk=pk)
     except Center.DoesNotExist:
         raise Http404("Center does not exist")
-    student_obj = Student.objects.filter(center_id=pk).all()
+    student_obj = Student.objects.filter(center_id=pk).order_by('-student_add_date').all()
 
     paginator = Paginator(student_obj, 50)  # Show 10 students per page
     page_number = request.GET.get('page')
@@ -166,7 +166,7 @@ def group_detail_trial_view(request, pk):
         center = group_trial_obj.center
     except GroupTrial.DoesNotExist:
         raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj)
+    student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj).order_by('-student_add_date')
     breadcrumbs = [
         ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
@@ -205,7 +205,7 @@ def group_detail_view(request, pk):
         center = group_obj.center
     except GroupPermanent.DoesNotExist:
         raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center=center, add_to_group=group_obj)
+    student_obj = Student.objects.filter(center=center, add_to_group=group_obj).order_by('-student_add_date')
     breadcrumbs = [
         ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
@@ -224,7 +224,7 @@ def group_detail_view(request, pk):
 def first_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        student_obj = Student.objects.filter(center_id=pk).all()
+        student_obj = Student.objects.filter(center_id=pk).order_by('-student_add_date').all()
         operators = CustomUser.objects.filter(role='operator')
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
@@ -249,7 +249,7 @@ def first_call_view(request, pk):
 def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').all()
+        student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').order_by('-student_add_date').all()
         operators = CustomUser.objects.filter(role='operator')
     except Center.DoesNotExist:
         raise Http404("Student does not exist")

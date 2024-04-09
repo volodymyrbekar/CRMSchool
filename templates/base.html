@@ -12,12 +12,10 @@
   <body>
     {% include 'navbar.html' %}
     <div class="container">
-      <br/>
 <!--      <form class="d-flex" role="search">-->
 <!--        <input class="form-control me-2" type="text" name="query" placeholder="Search..." >-->
 <!--        <button class="btn btn-outline-success" type="submit">Search</button>-->
 <!--      </form>-->
-    <br>
       {% if messages %}
         {% for message in messages %}
           <div>
@@ -29,6 +27,7 @@
           </div>
         {% endfor %}
       {% endif%}
+      <br/>
     {% block content %}
     {% endblock %}
     </div>
