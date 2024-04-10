@@ -4,7 +4,11 @@
 {% if user.is_authenticated %}
 
 {% for name, url in breadcrumbs %}
+ {% if not forloop.last %}
     <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+{% else %}
+ <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
+{% endif %}
     {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
 {% endfor %}
 
@@ -14,7 +18,7 @@
 <h1>{{group_trial_obj.group_name}}</h1>
 <div class="d-flex flex-row-reverse">
 
-<table class="table table-striped table-hover table-bordered table-sm centers-table">
+<table class="styled-table">
   <thead>
     <tr>
       <th scope="col">ПІБ</th>
@@ -23,7 +27,7 @@
         <th scope="col">Школа</th>
         <th scope="col">Клас</th>
         <th scope="col">Дата додавання</th>
-        <th scope="col"></th>
+        <th scope="col">Оператор</th>
 
     </tr>
   </thead>

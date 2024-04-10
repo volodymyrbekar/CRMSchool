@@ -4,10 +4,11 @@
 {% if  center_obj %}
 
 {% if user.is_authenticated %}
-
-<h3 style="color:blue;">{{ center_obj.center_name }} - {{ center_obj.location }}</h3>
+<div class="container">
+<h2>{{ center_obj.center_name }} - {{ center_obj.location }}</h2>
 
 {% if  student_obj_page %}
+
 
 <div class="d-flex flex-row-reverse">
 
@@ -53,10 +54,8 @@
 </div>
 </div>
 
- <h1>Всі Учні...</h1>
 
-
-<table class="table table-striped table-hover table-bordered table-sm centers-table students-table">
+<table class="styled-table">
   <thead>
     <tr>
       <th scope="col">ПІБ</th>
@@ -83,6 +82,7 @@
       {% endif %}
     </tbody>
   </table>
+</div>
         <div class="pagination">
     {% if student_obj_page.has_previous %}
         <a href="?page={{ student_obj_page.previous_page_number }}" class="prev">Назад</a>
@@ -101,7 +101,6 @@
         <a href="?page={{ student_obj_page.next_page_number }}" class="next">Вперед</a>
     {% endif %}
 </div>
-
 
 {% else %}
     <h2>Немає учнів. Будь ласка додайте учнів!</h2>

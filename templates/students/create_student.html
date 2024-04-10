@@ -2,7 +2,11 @@
 {% block content %}
 
 {% for name, url in breadcrumbs %}
+ {% if not forloop.last %}
     <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+{% else %}
+ <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
+{% endif %}
     {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
 {% endfor %}
 
