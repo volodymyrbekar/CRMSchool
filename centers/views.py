@@ -25,7 +25,6 @@ def create_center_view(request):
     #     raise PermissionDenied("You do not have permission to create a center")
     form = CreateCenterForm(request.POST or None)
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
     ]
     context = {'form': form,
@@ -72,7 +71,6 @@ def create_student_view(request, pk):
     form = CreateStudentForm(request.POST or None, initial={'center': pk})
 
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page
         ('Додати учня', request.path),  # Current page
@@ -168,7 +166,6 @@ def group_detail_trial_view(request, pk):
         raise Http404("Group does not exist")
     student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj).order_by('-student_add_date')
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page
         (group_trial_obj.group_name, request.path),  # Current page
@@ -207,7 +204,6 @@ def group_detail_view(request, pk):
         raise Http404("Group does not exist")
     student_obj = Student.objects.filter(center=center, add_to_group=group_obj).order_by('-student_add_date')
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page
         (group_obj.group_name, request.path),  # Current page
@@ -230,7 +226,6 @@ def first_call_view(request, pk):
         raise Http404("Student does not exist")
 
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
         (center_obj.center_name, f'/centers/{center_obj.id}/students'),  # Current center page
         ('Перший дзвінок', request.path),  # Current page
@@ -255,7 +250,6 @@ def second_call_view(request, pk):
         raise Http404("Student does not exist")
 
     breadcrumbs = [
-        ('Головна', '/'),  # Home page
         ('Центри', '/centers/'),  # Centers list page
         (center_obj.center_name, f'/centers/{center_obj.id}/students'),  # Current center page
         ('Другий дзвінок', request.path),  # Current page

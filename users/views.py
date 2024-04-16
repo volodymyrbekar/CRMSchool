@@ -13,6 +13,7 @@ def login_user_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        request.session['username'] = username
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)

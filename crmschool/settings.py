@@ -39,6 +39,9 @@ if not DEBUG:
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+SESSION_COOKIE_AGE = 60  # 60 minutes
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -60,7 +63,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'crmschool.middleware.session_expire_redirect_middleware.SessionExpireRedirectMiddleware',
 ]
+
 
 ROOT_URLCONF = 'crmschool.urls'
 

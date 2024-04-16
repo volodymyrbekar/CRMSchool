@@ -114,7 +114,7 @@ styled-table tbody tr.active-row {
 }
 
 /* Styles for the first call page */
-.first-call-row td:nth-last-child(-n+5) {
+.first-call-row td:nth-last-child(-n+6) {
     background-color: #e0fff0;
 }
 
