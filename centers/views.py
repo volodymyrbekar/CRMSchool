@@ -52,6 +52,11 @@ def student_list_view(request, pk):
     page_number = request.GET.get('page')
     student_obj_page = paginator.get_page(page_number)
 
+    breadcrumbs = [
+        ('Центри', '/centers/'),  # Centers list page
+        (center_obj.center_name, f'/centers/{center_obj.id}/students')
+    ]
+
     group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
     group_obj = GroupPermanent.objects.filter(center_id=pk).all()
     context = {
@@ -59,6 +64,7 @@ def student_list_view(request, pk):
         'center_obj': center_obj,
         'group_trial_obj': group_trial_obj,
         'group_obj': group_obj,
+        'breadcrumbs': breadcrumbs,
 
     }
     return render(request, 'students/students_list.html', context)
@@ -69,7 +75,6 @@ def student_list_view(request, pk):
 def create_student_view(request, pk):
     center = Center.objects.get(pk=pk)
     form = CreateStudentForm(request.POST or None, initial={'center': pk})
-
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page

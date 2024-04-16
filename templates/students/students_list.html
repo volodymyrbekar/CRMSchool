@@ -4,6 +4,16 @@
 {% if  center_obj %}
 
 {% if user.is_authenticated %}
+
+{% for name, url in breadcrumbs %}
+ {% if not forloop.last %}
+    <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+{% else %}
+ <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
+{% endif %}
+    {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
+{% endfor %}
+
 <div class="container">
 <h2>{{ center_obj.center_name }} - {{ center_obj.location }}</h2>
 
@@ -103,7 +113,15 @@
 </div>
 
 {% else %}
-    <h2>Немає учнів. Будь ласка додайте учнів!</h2>
+    <h3>Немає учнів. Будь ласка додайте учнів!</h3>
+
+<div class="d-flex flex-row-reverse">
+
+<!--  Додати учня -->
+    <a href="{% url 'create_student' pk=center_obj.id%}">
+      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
+    </a>
+</div>
 
  {% endif %}
  {% endif %}
