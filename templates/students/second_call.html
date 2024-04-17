@@ -18,6 +18,15 @@
 
 <h2>Другий Дзвінок...</h2>
 
+<div class="btn-group">
+  <select class="form-control" id="operatorDropdown">
+     <option value="">All Operators</option>
+    {% for operator in operators %}
+        <option value="{{ operator.username }}">{{ operator.username }}</option>
+    {% endfor %}
+  </select>
+</div>
+
 <table class="styled-table" >
   <thead>
     <tr>
@@ -44,7 +53,7 @@
   <tbody class="table-group-divider">
       {% if center_obj %}
         {% for student in student_obj %}
-        <tr class="second-call-row">
+        <tr class="second-call-row" data-operator="{{ student.second_call }}">
           <td>{{ student.student_full_name }}</td>
           <td>{{ student.student_phone_number }}</td>
           <td>{{ student.parent_phone_number }}</td>
@@ -75,6 +84,23 @@
     <h2>Немає учнів для дзвінка</h2>
 
 {% endif %}
+<script>
+  window.onload = function() {
+    var dropdown = document.querySelector('.form-control');
+    dropdown.addEventListener('change', function() {
+        var operatorUsername = this.options[this.selectedIndex].value.trim().toLowerCase();
+        var rows = document.querySelectorAll('.second-call-row');
+        rows.forEach(function(row) {
+            var rowOperator = row.dataset.operator.trim().toLowerCase();
+            if (operatorUsername === "" || rowOperator === operatorUsername) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+};
+</script>
 {% endif %}
 {% endblock content %}
 
