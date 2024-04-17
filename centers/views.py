@@ -225,8 +225,9 @@ def group_detail_view(request, pk):
 def first_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        student_obj = Student.objects.filter(center_id=pk).order_by('-student_add_date').all()
         operators = CustomUser.objects.filter(role='operator')
+        selected_operator = request.GET.get('operator')
+        student_obj = Student.objects.filter(center_id=pk, first_call=selected_operator).order_by('-student_add_date') if selected_operator else Student.objects.all()
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
 
@@ -249,8 +250,8 @@ def first_call_view(request, pk):
 def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').order_by('-student_add_date').all()
         operators = CustomUser.objects.filter(role='operator')
+        student_obj = Student.objects.filter(center_id=pk, first_call_satus='Так, прийдуть на пробне').order_by('-student_add_date').all()
     except Center.DoesNotExist:
         raise Http404("Student does not exist")
 

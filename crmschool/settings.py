@@ -39,7 +39,7 @@ if not DEBUG:
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-SESSION_COOKIE_AGE = 60  # 60 minutes
+SESSION_COOKIE_AGE = 60 * 60  # 60 minutes
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 # Application definition
