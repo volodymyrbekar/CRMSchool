@@ -1,0 +1,147 @@
+body {
+  font-family: 'lato', sans-serif;
+  background-color: #eee;
+}
+
+h2 {
+  text-align: left;
+  padding: 5px 0;
+  color: #808080;
+}
+
+.container {
+  max-width: 1600px;
+}
+
+.breadcrumb-link {
+    color: #008000;
+    text-decoration: none;
+    position: relative;
+    top: -20px;  /* Adjust this value to move the breadcrumbs higher or lower */
+}
+
+.breadcrumb-separator {
+    color: black;
+    margin: 0 10px;
+    position: relative;
+    top: -20px;
+}
+
+.breadcrumb-link:hover {
+    color: #696969;  /* Change the color on hover */
+}
+
+.breadcrumb-active {
+    color: #696969;
+}
+
+
+/* Styles for the pagination go here */
+.pagination {
+    display: flex;
+    font-size: 20px;
+    justify-content: space-between;
+    width: fit-content;
+    margin: auto;
+    color:gray;
+}
+
+.pagination .prev,
+.pagination .next {
+    color: black;
+    text-decoration: none;
+    margin: 0 10px; /* Add horizontal margin */
+}
+
+.pagination .page-numbers {
+    display: flex;
+    gap: 4px; /* Adjust this value to increase or decrease the space between page numbers */
+}
+
+.pagination .page-numbers .current {
+    color: black;
+    display: flex;
+}
+
+.pagination .page-numbers a {
+    color: inherit; /* Make the color the same as the surrounding text */
+    text-decoration: none; /* Remove the underline */
+}
+/* Tables  */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: arial, sans-serif;
+    font-size: 13px;
+}
+
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.styled-table thead tr {
+    background-color: #009879;
+    text-align: left;
+}
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.styled-table tbody tr:hover {
+    color: #21d12d; /* Change this to the color you want */
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+/* Styles for the first call page */
+.first-call-row td:nth-last-child(-n+6) {
+    background-color: #e0fff0;
+}
+
+.first-call-row td:last-child {
+    background-color: white;
+}
+
+/* Styles for the secon call page */
+.second-call-row td:nth-child(-n+6) {
+    background-color: #f5f5f5;
+}
+
+.second-call-row td:nth-child(n+7):nth-child(-n+11) {
+    background-color: #f5f5f5;
+}
+
+.second-call-row td:nth-last-child(-n+5) {
+    background-color: #e0fff0   ;
+}
+
+.second-call-row td:last-child {
+    background-color: white;
+}
+
+
+
+
+
+
+

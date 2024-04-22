@@ -29,12 +29,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-=09y8&5^_0zt)bnkl+04(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = str(os.environ.get('DEBUG', 'True')) == '1'
-DEBUG = True
-print(DEBUG)
+DEBUG =1
 
 ALLOWED_HOSTS = []
 if not DEBUG:
-    ALLOWED_HOSTS += [os.environ.get('ALLOWED_HOSTS')]
+    ALLOWED_HOSTS += [os.environ.get('DJANGO_ALLOWED_HOST')]
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -104,6 +103,33 @@ DATABASES = {
     }
 }
 
+POSTGRES_DB = os.environ.get("POSTGRES_DB")  # database name
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")  # database password
+POSTGRES_USER = os.environ.get("POSTGRES_USER")  # username
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")  # database host
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT")  # database port
+
+POSTGRES_READY = (
+    POSTGRES_DB is not None
+    and POSTGRES_PASSWORD is not None
+    and POSTGRES_USER is not None
+    and POSTGRES_HOST is not None
+    and POSTGRES_PORT is not None
+)
+
+if POSTGRES_READY:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": POSTGRES_DB,
+            "USER": POSTGRES_USER,
+            "PASSWORD": POSTGRES_PASSWORD,
+            "HOST": POSTGRES_HOST,
+            "PORT": POSTGRES_PORT,
+        }
+    }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -140,6 +166,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
