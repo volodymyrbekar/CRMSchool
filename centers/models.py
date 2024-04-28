@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import Q
 from django.conf import settings
 
 from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_TRIAL_STATUS
@@ -54,7 +53,6 @@ class Student(models.Model):
     second_call_satus = models.CharField(max_length=80, blank=True, null=True)
     add_to_group = models.CharField(max_length=100, blank=True, null=True)
     comment_second_call = models.CharField(max_length=250, blank=True, null=True)
-
 
     def __str__(self):
         return(f"{self.student_full_name} {self.student_phone_number} {self.parent_phone_number} {self.school}")

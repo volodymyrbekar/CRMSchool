@@ -6,129 +6,130 @@
 {% if user.is_authenticated %}
 
 {% for name, url in breadcrumbs %}
- {% if not forloop.last %}
-    <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+{% if not forloop.last %}
+<a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
 {% else %}
- <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
+<span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
 {% endif %}
-    {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
+{% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
 {% endfor %}
 
 <div class="container">
-<h2>{{ center_obj.center_name }} - {{ center_obj.location }}</h2>
+    <h2>{{ center_obj.center_name }} -- {{ center_obj.location }}</h2>
 
-{% if  student_obj_page %}
+    {% if student_obj_page %}
 
+    <div class="d-flex">
 
-<div class="d-flex flex-row-reverse">
-
-<!--  Додати учня -->
-    <a href="{% url 'create_student' pk=center_obj.id%}">
-      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
-    </a>
-
-
-  <div class="btn-group">
-  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Групи - пробне
-  </button>
-  <ul class="dropdown-menu">
-       {% for group in group_trial_obj %}
-        <li><a class="dropdown-item" href="{% url 'group_detail_trial' group.id %}">{{ group.group_name }}</a></li>
-            {% endfor %}
-       </ul>
-  </div>
+            <!--  Додати учня -->
+            <a href="{% url 'create_student' pk=center_obj.id%}">
+                <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
+            </a>
 
 
-<!-- Дропдаун груп на постійне -->
-    <div class="btn-group">
-  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Групи - постійне
-  </button>
-  <ul class="dropdown-menu">
-       {% for group in group_obj %}
-        <li><a class="dropdown-item" href="{% url 'group_detail' group.id %}">{{ group.group_name }}</a></li>
-            {% endfor %}
-       </ul>
-  </div>
-
-    <!-- Дропдаун Дзвінки -->
- <div class="btn-group">
-  <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Дзвінки
-  </button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="{% url 'first_call' center_obj.id %}">Перший Дзвінок</a></li>
-        <li><a class="dropdown-item" href="{% url 'second_call' center_obj.id %}">Другий Дзвінок</a></li>
-    </ul>
-</div>
-</div>
+        <div class="btn-group">
+            <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Групи - пробне
+            </button>
+            <ul class="dropdown-menu">
+                {% for group in group_trial_obj %}
+                <li><a class="dropdown-item" href="{% url 'group_detail_trial' group.id %}">{{ group.group_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
 
-<table class="styled-table">
-  <thead>
-    <tr>
-      <th scope="col">ПІБ</th>
-      <th scope="col">Номер Телефону</th>
-        <th scope="col">Номер Телефону Батьків</th>
-        <th scope="col">Школа</th>
-        <th scope="col">Клас</th>
-        <th scope="col">Дата додавання</th>
+        <!-- Дропдаун груп на постійне -->
+        <div class="btn-group">
+            <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Групи - постійне
+            </button>
+            <ul class="dropdown-menu">
+                {% for group in group_obj %}
+                <li><a class="dropdown-item" href="{% url 'group_detail' group.id %}">{{ group.group_name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
 
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-      {% if center_obj %}
+        <!-- Дропдаун Дзвінки -->
+        <div class="btn-group">
+            <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Дзвінки
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{% url 'first_call' center_obj.id %}">Перший Дзвінок</a></li>
+                <li><a class="dropdown-item" href="{% url 'second_call' center_obj.id %}">Другий Дзвінок</a></li>
+            </ul>
+        </div>
+    </div>
+
+
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th scope="col">ПІБ</th>
+            <th scope="col">Номер Телефону</th>
+            <th scope="col">Номер Телефону Батьків</th>
+            <th scope="col">Школа</th>
+            <th scope="col">Клас</th>
+            <th scope="col">Дата додавання</th>
+
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        {% if center_obj %}
         {% for student in student_obj_page %}
         <tr>
-          <td>{{ student.student_full_name }}</td>
-          <td>{{ student.student_phone_number }}</td>
-          <td>{{ student.parent_phone_number }}</td>
+            <td>{{ student.student_full_name }}</td>
+            <td>{{ student.student_phone_number }}</td>
+            <td>{{ student.parent_phone_number }}</td>
             <td>{{ student.school }}</td>
             <td>{{ student.class_number }}</td>
             <td>{{ student.student_add_date }}</td>
         </tr>
         {% endfor %}
-      {% endif %}
-    </tbody>
-  </table>
+        {% endif %}
+        </tbody>
+    </table>
 </div>
-        <div class="pagination">
+<div class="pagination">
     {% if student_obj_page.has_previous %}
-        <a href="?page={{ student_obj_page.previous_page_number }}" class="prev">Назад</a>
+    <a href="?page={{ student_obj_page.previous_page_number }}" class="prev">Назад</a>
     {% endif %}
     <div class="page-numbers">
         <!-- Page numbers -->
         {% for i in student_obj_page.paginator.page_range %}
-            {% if student_obj_page.number == i %}
-                <span class="current">{{ i }}</span>
-            {% else %}
-                <a href="?page={{ i }}">{{ i }}</a>
-            {% endif %}
+        {% if student_obj_page.number == i %}
+        <span class="current">{{ i }}</span>
+        {% else %}
+        <a href="?page={{ i }}">{{ i }}</a>
+        {% endif %}
         {% endfor %}
     </div>
     {% if student_obj_page.has_next %}
-        <a href="?page={{ student_obj_page.next_page_number }}" class="next">Вперед</a>
+    <a href="?page={{ student_obj_page.next_page_number }}" class="next">Вперед</a>
     {% endif %}
 </div>
 
 {% else %}
-    <h3>Немає учнів. Будь ласка додайте учнів!</h3>
+<h3>Немає учнів. Будь ласка додайте учнів!</h3>
 
-<div class="d-flex flex-row-reverse">
+<div class="d-flex flex-row">
 
-<!--  Додати учня -->
+    <!--  Додати учня -->
     <a href="{% url 'create_student' pk=center_obj.id%}">
-      <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
+        <button style="margin:5px;" type="button" class="btn btn-outline-success">Додати Учня</button>
     </a>
 </div>
 
- {% endif %}
- {% endif %}
-
-
+{% endif %}
 {% endif %}
 
+{% endif %}
 
 
 {% endblock content %}
