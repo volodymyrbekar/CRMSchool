@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'generate_unique_link' original.pk %}" class="btn btn-primary">{% trans "Generate Unique Link" %}</a>
+    </li>
+    {% if original.unique_link %}
+        <li>
+            <a href="{% url 'deactivate_unique_link' original.pk %}" class="btn btn-primary">{% trans "Deactivate Unique Link" %}</a>
+        </li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

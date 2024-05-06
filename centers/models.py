@@ -1,5 +1,8 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
+from django.utils.crypto import get_random_string
+from crmschool.settings import ALLOWED_HOSTS
 
 from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_TRIAL_STATUS
 
@@ -10,6 +13,16 @@ class Center(models.Model):
     center_name = models.CharField(max_length=300)
     location = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    unique_link = models.URLField(default=None, blank=True, null=True)
+
+    def generate_unique_link(self):
+        token = get_random_string(20)
+        self.unique_link = f"http://localhost:8000/centers/{self.pk}/students/create/{token}/"
+        self.save(update_fields=['unique_link'])
+
+    def deactivate_unique_link(self):
+        self.unique_link = None
+        self.save()
 
     def get_student_num(self):
         return self.student_set.all().count()

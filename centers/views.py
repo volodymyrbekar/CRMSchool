@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_http_methods
 
 from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentFirstForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, GroupPermanent
@@ -71,9 +72,8 @@ def student_list_view(request, pk):
 
 
 @login_required
-@permission_required('users.can_add_students', raise_exception=True)
 def create_student_view(request, pk):
-    center = Center.objects.get(pk=pk)
+    center = get_object_or_404(Center, pk=pk)
     form = CreateStudentForm(request.POST or None, initial={'center': pk})
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
@@ -94,6 +94,29 @@ def create_student_view(request, pk):
             messages.success(request, 'Учень створений успішно')
             # return redirect('students_list')
     return render(request, 'students/create_student.html', context)
+
+
+def create_student_with_token(request, pk, token):
+    center = get_object_or_404(Center, pk=pk)
+    form = CreateStudentForm(request.POST or None, initial={'center': center.pk})
+    currect_link = Center.objects.get(pk=pk).unique_link
+
+    if center.unique_link is None or center.unique_link != currect_link:
+        raise Http404("This link has been deactivated.")
+
+    context = {
+        'form': form,
+        'center': center,
+        'pk': pk,
+        'token': token,
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            create_student = form.save()
+            context['form'] = CreateStudentForm(initial={'center': pk})
+            messages.success(request, 'Учень створений успішно')
+
+    return render(request, 'students/create_student_with_token.html', context)
 
 
 @login_required
@@ -271,3 +294,26 @@ def second_call_view(request, pk):
         'breadcrumbs': breadcrumbs,
     }
     return render(request, 'students/second_call.html', context)
+
+
+@login_required
+def generate_unique_link(request, pk):
+    try:
+        center = get_object_or_404(Center, pk=pk)
+        if center.unique_link is None:
+            center.generate_unique_link()
+            messages.success(request, 'Unique link generated successfully')
+        else:
+            messages.error(request, 'Unique link already exists')
+    except:
+        messages.error(request, 'An error occurred')
+    return redirect('admin:centers_center_change', pk)
+
+
+@login_required
+def deactivate_unique_link(request, pk):
+    center = get_object_or_404(Center, pk=pk)
+    center.unique_link = None
+    center.save()
+    messages.success(request, 'Unique link deactivated successfully')
+    return redirect('admin:centers_center_change', pk)
