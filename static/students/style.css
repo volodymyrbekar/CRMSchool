@@ -106,7 +106,7 @@ styled-table tbody tr.active-row {
 }
 
 .styled-table tbody tr:hover {
-    color: #21d12d; /* Change this to the color you want */
+    color: #005bf2; /* Change this to the color you want */
 }
 
 .styled-table tbody tr:last-of-type {

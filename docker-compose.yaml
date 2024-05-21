@@ -18,11 +18,15 @@ services:
     ports:
         - "5432:5432"
     environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
-        - POSTGRES_DB=postgres
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - POSTGRES_HOST
+        - POSTGRES_PORT
     volumes:
       - ./db_data:/var/lib/postgresql/data
+    env_file:
+      - .env
     restart: on-failure
 
   pgweb:
@@ -31,7 +35,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+      - DATABASE_URL
+    env_file:
+      - .env
     depends_on:
       - postgres
     restart: on-failure
