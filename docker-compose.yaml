@@ -35,7 +35,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - DATABASE_URL
+      - PGWEB_DATABASE_URL
     env_file:
       - .env
     depends_on:
