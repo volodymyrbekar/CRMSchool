@@ -22,11 +22,11 @@ class CreateCenterForm(forms.ModelForm):
 
 
 class CreateStudentForm(forms.ModelForm):
-    student_full_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}), label="")
-    student_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}), label="")
-    parent_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Parent Phone Number'}), label="")
-    school = forms.CharField(required=True, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School'}), label="")
-    class_number = forms.IntegerField(required=True, widget=forms.NumberInput(attrs={'class': 'form-control', 'max': 11, 'min': 1, 'placeholder': 'Class Number'}), label="")
+    student_full_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    student_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    parent_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    school = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    class_number = forms.IntegerField(required=True, widget=forms.NumberInput())
     center = forms.ModelChoiceField(required=True, queryset=Center.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}), label="")
 
     class Meta:
@@ -74,9 +74,9 @@ class UpdateStudentFirstForm(forms.ModelForm):
     class_number = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'max': 11, 'min': 1, 'placeholder': 'Class Number'}), label="")
     center = forms.ModelChoiceField(required=True, queryset=Center.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}), label="")
 
-    first_call = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Перший Дзвінок'}), label="")
+    first_call = forms.ChoiceField(widget=forms.Select())
     first_call_satus = forms.ChoiceField(choices=CHOICES_FIRST_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус першого дзвінка'}), label="")
-    trial_registration = forms.ChoiceField(widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Запис на пробне'}), label="")
+    trial_registration = forms.ChoiceField(widget=forms.Select())
     trial_status = forms.ChoiceField(choices=CHOICES_TRIAL_STATUS, widget=forms.Select(attrs={'class': 'form-control'}),label="")
     comment_first_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
 
