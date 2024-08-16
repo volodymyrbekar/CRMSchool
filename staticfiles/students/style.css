@@ -6,7 +6,7 @@ body {
 h2 {
   text-align: left;
   padding: 5px 0;
-  color: #808080;
+  color: black;
 }
 
 .container {
@@ -106,7 +106,7 @@ styled-table tbody tr.active-row {
 }
 
 .styled-table tbody tr:hover {
-    color: #21d12d; /* Change this to the color you want */
+    color: #005bf2; /* Change this to the color you want */
 }
 
 .styled-table tbody tr:last-of-type {
@@ -138,10 +138,6 @@ styled-table tbody tr.active-row {
 .second-call-row td:last-child {
     background-color: white;
 }
-
-
-
-
 
 
 

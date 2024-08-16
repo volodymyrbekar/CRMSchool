@@ -17,7 +17,7 @@ def login_user_view(request):
             messages.success(request, 'Invalid username or password. Please try again...')
             return redirect('login')
     else:
-        return render(request, 'users/login.html', {})
+        return render(request, 'users/login.html', {'title': 'Login'})
 
 
 def logout_user_view(request):
