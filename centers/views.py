@@ -14,6 +14,7 @@ from users.models import CustomUser
 def centers_list_view(request):
     centers_obj = Center.objects.all()
     context = {
+        'title': 'Центри',
         'centers': centers_obj,
     }
     return render(request, 'centers/centers_list.html', context)  # This is the file that will be rendered
@@ -28,9 +29,11 @@ def create_center_view(request):
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
     ]
-    context = {'form': form,
-               'breadcrumbs': breadcrumbs,
-               }
+    context = {
+        'title': 'Створити центр',
+        'form': form,
+        'breadcrumbs': breadcrumbs,
+        }
     if request.method == 'POST':
         if form.is_valid():
             create_center = form.save()
@@ -61,6 +64,7 @@ def student_list_view(request, pk):
     group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
     group_obj = GroupPermanent.objects.filter(center_id=pk).all()
     context = {
+        'title': 'Студенти',
         'student_obj_page': student_obj_page,
         'center_obj': center_obj,
         'group_trial_obj': group_trial_obj,
@@ -82,6 +86,7 @@ def create_student_view(request, pk):
     ]
 
     context = {
+        'title': 'Додати студента',
         'form': form,
         'center': center,
         'pk': pk,
@@ -105,6 +110,7 @@ def create_student_with_token(request, pk, token):
         raise Http404("This link has been deactivated.")
 
     context = {
+        'title': 'Створення студента',
         'form': form,
         'center': center,
         'pk': pk,
@@ -126,6 +132,7 @@ def first_call_student_update_view(request, pk):
         student = get_object_or_404(Student, id=pk)
         form = UpdateStudentFirstForm(instance=student)
         context = {
+            'title': 'Перший дзвінок',
             'form': form,
             'student_obj': student,
         }
@@ -151,6 +158,7 @@ def second_call_student_update_view(request, pk):
         student = get_object_or_404(Student, id=pk)
         form = UpdateStudentSecondForm(instance=student)
         context = {
+            'title': 'Другий дзвінок',
             'form': form,
             'student_obj': student,
         }
@@ -174,6 +182,7 @@ def second_call_student_update_view(request, pk):
 def create_group_trial_view(request):
     form = CreateGroupTrialForm(request.POST or None)
     context = {
+        'title': 'Створити групу пробна',
         'form': form
     }
     if request.method == 'POST':
@@ -199,6 +208,7 @@ def group_detail_trial_view(request, pk):
         (group_trial_obj.group_name, request.path),  # Current page
     ]
     context = {
+        'title': group_trial_obj,
         'group_trial_obj': group_trial_obj,
         'student_obj': student_obj,
         'breadcrumbs': breadcrumbs,
@@ -212,6 +222,7 @@ def create_group(request):
 
     form = CreateGroupForm(request.POST or None)
     context = {
+        'title': 'Створити групу постійна',
         'form': form
     }
     if request.method == 'POST':
@@ -237,6 +248,7 @@ def group_detail_view(request, pk):
         (group_obj.group_name, request.path),  # Current page
     ]
     context = {
+        'title': group_obj,
         'group_obj': group_obj,
         'student_obj': student_obj,
         'breadcrumbs': breadcrumbs,
@@ -261,6 +273,7 @@ def first_call_view(request, pk):
     ]
 
     context = {
+        'title': 'Перший дзвінок',
         'student_obj': student_obj,
         'center_obj': center_obj,
         'operators': operators,
@@ -288,6 +301,7 @@ def second_call_view(request, pk):
     ]
 
     context = {
+        'title': 'Другий дзвінок',
         'center_obj': center_obj,
         'student_obj': student_obj,
         'operators': operators,
