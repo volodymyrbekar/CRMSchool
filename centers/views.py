@@ -110,7 +110,7 @@ def create_student_with_token(request, pk, token):
         raise Http404("This link has been deactivated.")
 
     context = {
-        'title': 'Створення студента',
+        'title': 'Додати учня',
         'form': form,
         'center': center,
         'pk': pk,
