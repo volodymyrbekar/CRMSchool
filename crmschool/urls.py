@@ -3,9 +3,6 @@ from django.urls import path, include
 from django.views.generic.base import RedirectView
 from users import views
 
-from django.conf import settings
-from django.conf.urls.static import static
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('centers.urls')),
@@ -13,7 +10,3 @@ urlpatterns = [
     path('accounts/login/', views.login_user_view, name='login'),
     path('logout/', views.logout_user_view, name='logout'),
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
