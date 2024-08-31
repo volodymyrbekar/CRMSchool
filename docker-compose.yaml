@@ -57,9 +57,9 @@ services:
       - "80:80"
     volumes:
       - './nginx.conf:/etc/nginx/nginx.conf'
+      - static_volume:/app/staticfiles
     depends_on:
       - app
-      - pgweb
     restart: on-failure
     networks:
         - dev

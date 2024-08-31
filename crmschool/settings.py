@@ -1,8 +1,11 @@
 from pathlib import Path
 import os
 import logging
+from dotenv import load_dotenv
 from logging.handlers import RotatingFileHandler
 
+from django.core.exceptions import ImproperlyConfigured
+load_dotenv()
 
 LOG_FILENAME = 'django.log'
 
@@ -25,14 +28,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-=09y8&5^_0zt)bnkl+04(6+9a^8(v!2-)5fxdar9whs9f009rt')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = str(os.environ.get('DEBUG', 'True')) == '1'
-DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',]
+DEBUG = os.getenv("DEBUG") == 'True'
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST", "").split(",")
 if not DEBUG:
-    ALLOWED_HOSTS += [os.environ.get('DJANGO_ALLOWED_HOST')]
+    ALLOWED_HOSTS += ['qcode.space']
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -91,32 +94,25 @@ WSGI_APPLICATION = 'crmschool.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'postgres',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'postgres',
+#         'PORT': '5432',
+#     }
+# }
 
-POSTGRES_DB = os.environ.get("POSTGRES_DB")  # database name
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")  # database password
-POSTGRES_USER = os.environ.get("POSTGRES_USER")  # username
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST")  # database host
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT")  # database port
+POSTGRES_DB = os.getenv("POSTGRES_DB")  # database name
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")  # database password
+POSTGRES_USER = os.getenv("POSTGRES_USER")  # username
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")  # database host
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")  # database port
 
-POSTGRES_READY = (
-    POSTGRES_DB is not None
-    and POSTGRES_PASSWORD is not None
-    and POSTGRES_USER is not None
-    and POSTGRES_HOST is not None
-    and POSTGRES_PORT is not None
-)
 
-if POSTGRES_READY:
+if all([POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER, POSTGRES_HOST, POSTGRES_PORT]):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -127,7 +123,8 @@ if POSTGRES_READY:
             "PORT": POSTGRES_PORT,
         }
     }
-
+else:
+    raise ImproperlyConfigured("Database configuration is incomplete. Please check your environment variables.")
 
 
 # Password validation
@@ -174,6 +171,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Secure cookies
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = False
 
