@@ -35,7 +35,7 @@ DEBUG = os.getenv("DEBUG") == 'True'
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST", "").split(",")
 if not DEBUG:
-    ALLOWED_HOSTS += ['qcode.space']
+    ALLOWED_HOSTS += ['web-universe']
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
