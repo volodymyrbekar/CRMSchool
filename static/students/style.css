@@ -10,7 +10,13 @@ h2 {
 }
 
 .container {
-  max-width: 1600px;
+  width: 100%;
+}
+
+.second-call-page {
+  width: 100%;
+  position: absolute;
+  left: 20px;
 }
 
 .breadcrumb-link {
