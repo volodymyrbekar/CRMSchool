@@ -16,9 +16,8 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=50, blank=True, null=True)
     username = models.CharField(max_length=150, unique=True)
 
-    groups = models.ManyToManyField(Group, blank=True, related_name="customuser_set")
-    user_permissions = models.ManyToManyField(Permission, blank=True, related_name="customuser_set")
-
+    groups = models.ManyToManyField(Group, blank=True)
+    user_permissions = models.ManyToManyField(Permission, blank=True)
 
     def save(self, *args, **kwargs):
         super(CustomUser, self).save(*args, **kwargs)
@@ -30,12 +29,10 @@ class CustomUser(AbstractUser):
             permissions = Permission.objects.filter(codename__in=[
                 'can_edit_first_call', 'can_edit_second_call', 'can_add_students'
             ])  # get the specific permissions
-            for permission in permissions:
-                self.user_permissions.add(permission)
+            self.user_permissions.add(*permissions)
         elif self.role == self.ROLE_ADMIN:
             permissions = Permission.objects.exclude(codename__in='can_access_admin')  # get all permissions except 'can_access_admin'
-            for permission in permissions:
-                self.user_permissions.add(permission)
+            self.user_permissions.add(*permissions)
 
     class Meta:
         permissions = [
