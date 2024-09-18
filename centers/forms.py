@@ -84,8 +84,6 @@ class UpdateStudentFirstForm(forms.ModelForm):
         super(UpdateStudentFirstForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
         self.fields['trial_registration'] = forms.ModelChoiceField(queryset=GroupTrial.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Реєстрація на пробне'}), label="")
-        self.fields['trial_status'].widget.attrs['class'] = 'form-control'
-
         User = get_user_model()
         operators = User.objects.filter(role='operator')
         self.fields['first_call'] = forms.ModelChoiceField(queryset=operators, empty_label=None,
@@ -102,14 +100,14 @@ class UpdateStudentFirstForm(forms.ModelForm):
 
 class UpdateStudentSecondForm(forms.ModelForm):
     second_call = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'}), label="")
-    second_call_satus = forms.ChoiceField(choices=CHOICES_SECOND_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'}), label="")
+    second_call_satus = forms.ChoiceField(required=False, choices=CHOICES_SECOND_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'}), label="")
     add_to_group = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Додати до групи'}), label="")
     comment_second_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
 
     def __init__(self, *args, **kwargs):
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=GroupPermanent.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
+        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=GroupPermanent.objects.all(), empty_label='---', required=False, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
 
         User = get_user_model()
         operators = User.objects.filter(role='operator')

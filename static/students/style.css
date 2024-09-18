@@ -1,6 +1,9 @@
 body {
   font-family: 'lato', sans-serif;
-  background-color: #eee;
+}
+
+body.default-background {
+    background-color: #e4e4e4;
 }
 
 h2 {
@@ -16,7 +19,7 @@ h2 {
 .second-call-page {
   width: 100%;
   position: absolute;
-  left: 20px;
+  left: 50px;
 }
 
 .breadcrumb-link {
