@@ -34,8 +34,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv("DEBUG") == 'True'
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST", "").split(",")
-if not DEBUG:
-    ALLOWED_HOSTS += ['web-universe']
+# if not DEBUG:
+#     ALLOWED_HOSTS += ['web-universe']
 
 
 AUTH_USER_MODEL = 'users.CustomUser'
