@@ -54,7 +54,7 @@ services:
   nginx:
     image: nginx:stable-alpine
     ports:
-      - "80:81"
+      - "80:81" # `80` is the default port for HTTP
     volumes:
       - './nginx.conf:/etc/nginx/nginx.conf'
       - static_volume:/app/staticfiles
