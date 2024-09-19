@@ -4,7 +4,7 @@ networks:
 services:
   app:
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 crmschool.wsgi:application
+    command: gunicorn --bind 161.35.66.41:8000 crmschool.wsgi:application
     expose:
       - 8000
     ports:
