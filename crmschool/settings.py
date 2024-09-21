@@ -3,6 +3,7 @@ import os
 import logging
 from dotenv import load_dotenv
 from logging.handlers import RotatingFileHandler
+from decouple import config
 
 from django.core.exceptions import ImproperlyConfigured
 load_dotenv()
@@ -33,8 +34,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST", "").split(",")
-
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
 
 AUTH_USER_MODEL = 'users.CustomUser'
 

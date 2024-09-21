@@ -12,6 +12,8 @@ services:
     volumes:
       - .:/app
       - static_volume:/app/staticfiles
+    env_file:
+      - .env
     depends_on:
       - postgres
     restart: on-failure
