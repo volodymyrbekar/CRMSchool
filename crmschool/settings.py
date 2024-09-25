@@ -34,8 +34,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
-
+# ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', 'webuniverseua.com', 'www.webuniverseua.com']
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 AUTH_USER_MODEL = 'users.CustomUser'
 
 SESSION_COOKIE_AGE = 60 * 60  # 60 minutes
