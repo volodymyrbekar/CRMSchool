@@ -45,6 +45,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://webuniverseua.com',
     'http://www.webuniverseua.com',
     'http://webuniverseua.com:81'
+    'http://www.webuniverseua.com:81',
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
 

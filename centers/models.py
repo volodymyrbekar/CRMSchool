@@ -17,7 +17,7 @@ class Center(models.Model):
 
     def generate_unique_link(self):
         token = get_random_string(20)
-        self.unique_link = f"http://www.webuniverseua.com:8000/centers/{self.pk}/students/create/{token}/"
+        self.unique_link = f"http://www.webuniverseua.com:81/centers/{self.pk}/students/create/{token}/"
         self.save(update_fields=['unique_link'])
 
     def deactivate_unique_link(self):
