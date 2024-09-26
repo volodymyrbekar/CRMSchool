@@ -33,10 +33,18 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
+DEBUG=True
 
 # ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', 'webuniverseua.com', 'www.webuniverseua.com']
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', '0.0.0.0', 'webuniverseua.com', 'www.webuniverseua.com', '161.35.66.41']
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1',
+    'http://161.35.66.41',
+    'http://192.168.0.210',
+    'http://localhost',
+    'http://webuniverseua.com',
+    'http://www.webuniverseua.com',
+]
 AUTH_USER_MODEL = 'users.CustomUser'
 
 SESSION_COOKIE_AGE = 60 * 60  # 60 minutes
@@ -170,7 +178,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Secure cookies
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = None
