@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
-DEBUG=True
+DEBUG = False
 
 # ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', '0.0.0.0', 'webuniverseua.com', 'www.webuniverseua.com', '161.35.66.41']
@@ -44,6 +44,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost',
     'http://webuniverseua.com',
     'http://www.webuniverseua.com',
+    'http://webuniverseua.com:81'
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
 
