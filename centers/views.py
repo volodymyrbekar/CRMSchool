@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 from django.http import Http404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
@@ -120,8 +121,8 @@ def create_student_with_token(request, pk, token):
         if form.is_valid():
             create_student = form.save()
             context['form'] = CreateStudentForm(initial={'center': pk})
-            messages.success(request, 'Учень створений успішно')
-
+            success_message = f'Учень <strong>{create_student.student_full_name}</strong> успішно створений'
+            messages.success(request, mark_safe(success_message))
     return render(request, 'students/create_student_with_token.html', context)
 
 
@@ -140,7 +141,8 @@ def first_call_student_update_view(request, pk):
             form = UpdateStudentFirstForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Учень успішно оновлений')
+                success_message = f'Учень <strong>{form.student_full_name}</strong> успішно оновлений'
+                messages.success(request, mark_safe(success_message))
                 return redirect('first_call', pk=student.center.pk)
             else:
                 # print(form.errors)
@@ -166,7 +168,8 @@ def second_call_student_update_view(request, pk):
             form = UpdateStudentSecondForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Учень успішно оновлений')
+                success_message = f'Учень <strong>{form.student_full_name}</strong> успішно оновлений'
+                messages.success(request, mark_safe(success_message))
                 return redirect('second_call', pk=student.center.pk)
             else:
                 # print(form.errors)
@@ -189,7 +192,8 @@ def create_group_trial_view(request):
         if form.is_valid():
             create_group_trial = form.save()
             context['form'] = CreateGroupTrialForm()
-            messages.success(request, 'Група на пробне успішно створена')
+            success_message = f'Група <strong>{create_group_trial.group_name}</strong> на пробне успішно створена'
+            messages.success(request, mark_safe(success_message))
             return redirect('centers_list')
     return render(request, 'groups/create_group_trial.html', context)
 
@@ -229,7 +233,8 @@ def create_group(request):
         if form.is_valid():
             create_group = form.save()
             context['form'] = CreateGroupForm()
-            messages.success(request, 'Група успішно створена')
+            success_message = f'Група <strong>{create_group.group_name}</strong> успішно створена'
+            messages.success(request, mark_safe(success_message))
             return redirect('centers_list')
     return render(request, 'groups/create_group_permanent.html', context)
 
@@ -264,7 +269,7 @@ def first_call_view(request, pk):
         selected_operator = request.GET.get('operator')
         student_obj = Student.objects.filter(center_id=pk, first_call=selected_operator).order_by('-student_add_date') if selected_operator else Student.objects.all()
     except Center.DoesNotExist:
-        raise Http404("Student does not exist")
+        raise Http404("Центр не знайдений")
 
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
@@ -292,7 +297,7 @@ def second_call_view(request, pk):
             center_id=pk, second_call=selected_operator, first_call_satus='Так, прийдуть на пробне'
         ).order_by('-student_add_date') if selected_operator else Student.objects.all()
     except Center.DoesNotExist:
-        raise Http404("Student does not exist")
+        raise Http404("Центр не знайдений")
 
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
@@ -320,7 +325,7 @@ def generate_unique_link(request, pk):
         else:
             messages.error(request, 'Unique link already exists')
     except:
-        messages.error(request, 'An error occurred')
+        messages.error(request, 'Посилання не згенеровано')
     return redirect('admin:centers_center_change', pk)
 
 

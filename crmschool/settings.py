@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
-DEBUG = False
+DEBUG = True
 
 # ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', '0.0.0.0', 'webuniverseua.com', 'www.webuniverseua.com', '161.35.66.41']
