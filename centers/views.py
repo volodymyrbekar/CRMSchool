@@ -97,7 +97,8 @@ def create_student_view(request, pk):
         if form.is_valid():
             create_student = form.save()
             context['form'] = CreateStudentForm(initial={'center': pk})
-            messages.success(request, 'Учень створений успішно')
+            success_message = f'Учень <strong>{create_student.student_full_name}</strong> успішно оновлений'
+            messages.success(request, mark_safe(success_message))
             # return redirect('students_list')
     return render(request, 'students/create_student.html', context)
 

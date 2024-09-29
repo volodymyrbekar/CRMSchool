@@ -27,7 +27,11 @@ class CreateStudentForm(forms.ModelForm):
     parent_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     school = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     class_number = forms.IntegerField(required=True, widget=forms.NumberInput())
-    center = forms.ModelChoiceField(required=True, queryset=Center.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}), label="")
+    center = forms.ModelChoiceField(
+        required=True,
+        queryset=Center.objects.all(),
+        empty_label=None,
+        widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}))
 
     class Meta:
         model = Student
@@ -67,30 +71,86 @@ class CreateStudentForm(forms.ModelForm):
 
 
 class UpdateStudentFirstForm(forms.ModelForm):
-    student_full_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}), label="")
-    student_phone_number = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}), label="")
-    parent_phone_number = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Parent Phone Number'}), label="")
-    school = forms.CharField(required=False, max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School'}), label="")
-    class_number = forms.IntegerField(required=False, widget=forms.NumberInput(attrs={'class': 'form-control', 'max': 11, 'min': 1, 'placeholder': 'Class Number'}), label="")
-    center = forms.ModelChoiceField(required=True, queryset=Center.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}), label="")
+    student_full_name = forms.CharField(
+        required=False, max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+        label=""
+    )
+    student_phone_number = forms.CharField(
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+        label=""
+    )
+    parent_phone_number = forms.CharField(
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Parent Phone Number'}),
+        label=""
+    )
+    school = forms.CharField(
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'School'}),
+        label=""
+    )
+    class_number = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'max': 11, 'min': 1, 'placeholder': 'Class Number'}),
+        label=""
+    )
+    center = forms.ModelChoiceField(
+        required=True,
+        queryset=Center.objects.all(),
+        empty_label=None,
+        widget=forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+        label=""
+    )
 
     first_call = forms.ChoiceField(widget=forms.Select())
-    first_call_satus = forms.ChoiceField(choices=CHOICES_FIRST_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус першого дзвінка'}), label="")
-    trial_registration = forms.ChoiceField(widget=forms.Select())
-    trial_status = forms.ChoiceField(choices=CHOICES_TRIAL_STATUS, widget=forms.Select(attrs={'class': 'form-control'}),label="")
-    comment_first_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
+    first_call_satus = forms.ChoiceField(
+        required=True,
+        choices=CHOICES_FIRST_CALL_STATUS,
+        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус першого дзвінка'}),
+        label=""
+    )
+    trial_registration = forms.ModelChoiceField(
+        queryset=GroupTrial.objects.all(),
+        empty_label='---',
+        label="----",
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Реєстрація на пробне'})
+    )
+    trial_status = forms.ChoiceField(
+        required=False,
+        choices=CHOICES_TRIAL_STATUS,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label=""
+    )
+    comment_first_call = forms.CharField(
+        required=False,
+        max_length=250,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}),
+        label=""
+    )
 
     def __init__(self, *args, **kwargs):
         super(UpdateStudentFirstForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-        self.fields['trial_registration'] = forms.ModelChoiceField(queryset=GroupTrial.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Реєстрація на пробне'}), label="")
+        self.fields['trial_registration'] = forms.ModelChoiceField(
+            required=False,
+            queryset=GroupTrial.objects.all(),
+            empty_label='----',
+            widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Реєстрація на пробне'}),
+            label="Реєстрація на пробне"
+        )
         User = get_user_model()
-        operators = User.objects.filter(role='operator')
-        self.fields['first_call'] = forms.ModelChoiceField(queryset=operators, empty_label=None,
-                                                           widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Оператор'}), label="")
-
-        # if self.instance and self.instance.pk:
-        #     self.fields['first_call'].initial = self.instance.first_call
+        operators = User.objects.filter(role__in=['operator', 'administrator'])
+        self.fields['first_call'] = forms.ModelChoiceField(
+            queryset=operators,
+            empty_label=None,
+            widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Оператор'})
+        )
 
     class Meta:
         model = Student
@@ -98,21 +158,38 @@ class UpdateStudentFirstForm(forms.ModelForm):
 
 
 class UpdateStudentSecondForm(forms.ModelForm):
-    second_call = forms.CharField(required=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'}), label="")
-    second_call_satus = forms.ChoiceField(required=False, choices=CHOICES_SECOND_CALL_STATUS, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'}), label="")
-    add_to_group = forms.CharField(required=False, max_length=100, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Додати до групи'}), label="")
-    comment_second_call = forms.CharField(required=False, max_length=250, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'}), label="")
+    second_call = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'})
+    )
+    second_call_satus = forms.ChoiceField(
+        required=False,
+        choices=CHOICES_SECOND_CALL_STATUS,
+        widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'})
+    )
+    add_to_group = forms.CharField(
+        required=False,
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Додати до групи'})
+    )
+    comment_second_call = forms.CharField(
+        required=False,
+        max_length=250,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Коментар'})
+    )
 
     def __init__(self, *args, **kwargs):
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=GroupPermanent.objects.all(), empty_label='---', required=False, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}), label="")
+        self.fields['add_to_group'] = forms.ModelChoiceField(queryset=GroupPermanent.objects.all(), empty_label='---', required=False, widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Обрати групу'}),  label="Запис на пробне")
 
         User = get_user_model()
-        operators = User.objects.filter(role='operator')
-        self.fields['second_call'] = forms.ModelChoiceField(queryset=operators, empty_label=None,
-                                                           widget=forms.Select(attrs={'class': 'form-control',
-                                                                                      'placeholder': 'Оператор'}), label="")
+        operators = User.objects.filter(role__in=['operator', 'administrator'])
+        self.fields['second_call'] = forms.ModelChoiceField(
+            queryset=operators,
+            empty_label=None,
+            widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Оператор'})
+        )
 
     class Meta:
         model = Student
