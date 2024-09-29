@@ -265,10 +265,13 @@ def group_detail_view(request, pk):
 @login_required
 def first_call_view(request, pk):
     try:
-        center_obj = Center.objects.get(pk=pk)
+        center_obj = get_object_or_404(Center, pk=pk)
         operators = CustomUser.objects.filter(role='operator')
         selected_operator = request.GET.get('operator')
-        student_obj = Student.objects.filter(center_id=pk, first_call=selected_operator).order_by('-student_add_date') if selected_operator else Student.objects.all()
+        # students = Student.objects.filter(center=center_obj)
+        student_obj = Student.objects.filter(center=center_obj)
+        if selected_operator:
+            student_obj = student_obj.filter(first_call=selected_operator)
     except Center.DoesNotExist:
         raise Http404("Центр не знайдений")
 
@@ -280,6 +283,7 @@ def first_call_view(request, pk):
 
     context = {
         'title': 'Перший дзвінок',
+        # 'students': students,
         'student_obj': student_obj,
         'center_obj': center_obj,
         'operators': operators,
@@ -294,9 +298,16 @@ def second_call_view(request, pk):
         center_obj = Center.objects.get(pk=pk)
         operators = CustomUser.objects.filter(role='operator')
         selected_operator = request.GET.get('operator')
-        student_obj = Student.objects.filter(
-            center_id=pk, second_call=selected_operator, first_call_satus='Так, прийдуть на пробне'
-        ).order_by('-student_add_date') if selected_operator else Student.objects.all()
+        student_obj = Student.objects.filter(center=center_obj)
+        if selected_operator:
+            student_obj = student_obj.filter(
+                second_call=selected_operator,
+                first_call_satus='Так, прийдуть на пробне'
+            )
+        else:
+            student_obj = Student.objects.filter(
+                center=center_obj).filter(
+                first_call_satus='Так, прийдуть на пробне').order_by('-student_add_date')
     except Center.DoesNotExist:
         raise Http404("Центр не знайдений")
 
