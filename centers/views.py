@@ -132,14 +132,14 @@ def create_student_with_token(request, pk, token):
 def first_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
-        form = UpdateStudentFirstForm(instance=student)
+        form = UpdateStudentFirstForm(center_instance=student.center, instance=student, )
         context = {
             'title': 'Перший дзвінок',
             'form': form,
             'student_obj': student,
         }
         if request.method == 'POST':
-            form = UpdateStudentFirstForm(request.POST or None, instance=student)
+            form = UpdateStudentFirstForm(request.POST or None, center_instance=student.center, instance=student)
             if form.is_valid():
                 form.save()
                 success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
@@ -159,14 +159,14 @@ def first_call_student_update_view(request, pk):
 def second_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
-        form = UpdateStudentSecondForm(instance=student)
+        form = UpdateStudentSecondForm(center_instance=student.center, instance=student)
         context = {
             'title': 'Другий дзвінок',
             'form': form,
             'student_obj': student,
         }
         if request.method == 'POST':
-            form = UpdateStudentSecondForm(request.POST or None, instance=student)
+            form = UpdateStudentSecondForm(request.POST or None, center_instance=student.center, instance=student)
             if form.is_valid():
                 form.save()
                 success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
