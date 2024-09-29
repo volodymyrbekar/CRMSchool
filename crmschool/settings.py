@@ -33,7 +33,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == 'True'
-DEBUG = True
 
 # ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOST', default='').split(',')
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.0.210', '0.0.0.0', 'webuniverseua.com', 'www.webuniverseua.com', '161.35.66.41']
@@ -42,10 +41,10 @@ CSRF_TRUSTED_ORIGINS = [
     'http://161.35.66.41',
     'http://192.168.0.210',
     'http://localhost',
-    'http://webuniverseua.com',
-    'http://www.webuniverseua.com',
-    'http://webuniverseua.com:81'
-    'http://www.webuniverseua.com:81',
+    'http://webuniverseua.com:8085',
+    'http://www.webuniverseua.com:8085',
+    'https://webuniverseua.com:8085',
+    'https://www.webuniverseua.com:8085',
 ]
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -181,6 +180,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Secure cookies
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = False
-SECURE_SSL_REDIRECT = False
-SECURE_PROXY_SSL_HEADER = None
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

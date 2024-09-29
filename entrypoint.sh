@@ -2,8 +2,12 @@
 
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
-
-# Start the application
-echo "Starting the application..."
-#gunicorn  crmschool.wsgi:application --bind 0.0.0.0:8000  # replace 0.0.0.0 -> 161.35.66.41
-python manage.py runserver 0.0.0.0:8000
+if [ "$DEBUG" == "True" ]; then
+    echo "WARNING: DEBUG is set to True! This is not recommended for production."
+    # Start the application using Django's runserver
+    python manage.py runserver 0.0.0.0:8000
+else
+    # Start the application using Gunicorn in production mode
+    echo "Starting the application in production mode..."
+    gunicorn crmschool.wsgi:application --bind 0.0.0.0:8000
+fi
