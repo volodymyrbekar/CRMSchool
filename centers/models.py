@@ -52,6 +52,7 @@ class Student(models.Model):
     student_full_name = models.CharField(max_length=200, blank=True, null=True)
     student_phone_number = models.CharField(max_length=30, blank=True, null=True)
     parent_phone_number = models.CharField(max_length=30, blank=True, null=True)
+    parent_full_name = models.CharField(max_length=200, blank=True, null=True)
     school = models.TextField(max_length=50, blank=True, null=True)
     class_number = models.PositiveIntegerField(default=1, choices=((i, i) for i in range(1, 12)))
     student_add_date = models.DateTimeField(auto_now_add=True)

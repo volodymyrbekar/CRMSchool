@@ -33,6 +33,15 @@
         </p>
     </div>
 
+    <!-- parent_full_name -->
+    <div class="form-group">
+        <p>
+        <label for="parent_full_name">ПІБ батьків:</label>
+        <input type="text" id="parent_full_name" class="form-control" value="{{ student_obj.parent_full_name }}" readonly>
+        <input type="hidden" name="parent_phone_number" value="{{ student_obj.parent_full_name }}">
+        </p>
+    </div>
+
     <!-- school -->
     <div class="form-group">
         <p>

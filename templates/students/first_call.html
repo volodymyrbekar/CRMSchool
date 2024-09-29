@@ -33,9 +33,10 @@
       <th scope="col">ПІБ</th>
       <th scope="col">Номер Телефону</th>
         <th scope="col">Номер Телефону Батьків</th>
+        <th scope="col">ПІБ Батьків</th>
         <th scope="col">Школа</th>
         <th scope="col">Клас</th>
-        <th scope="col">Дата додавання</th>
+<!--        <th scope="col">Дата додавання</th>-->
         <th scope="col">Перший дзвінок</th>
         <th scope="col">Статус Першого Дзвінка</th>
         <th scope="col">Запис на пробне</th>
@@ -51,9 +52,10 @@
             <td>{{ student.student_full_name}}</td>
             <td>{{ student.student_phone_number}}</td>
             <td>{{ student.parent_phone_number}}</td>
+            <td>{{ student.parent_full_name}}</td>
             <td>{{ student.school|default_if_none:""}}</td>
             <td>{{ student.class_number|default_if_none:""}}</td>
-            <td>{{ student.student_add_date|default_if_none:""}}</td>
+<!--            <td>{{ student.student_add_date|default_if_none:""}}</td>-->
             <td>{{ student.first_call|default_if_none:""}}</td>
             <td>{{ student.first_call_satus|default_if_none:""}}</td>
             <td>{{ student.trial_registration|default_if_none:""}}</td>
