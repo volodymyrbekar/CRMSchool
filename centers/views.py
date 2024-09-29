@@ -141,7 +141,7 @@ def first_call_student_update_view(request, pk):
             form = UpdateStudentFirstForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
-                success_message = f'Учень <strong>{form.student_full_name}</strong> успішно оновлений'
+                success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
                 messages.success(request, mark_safe(success_message))
                 return redirect('first_call', pk=student.center.pk)
             else:
@@ -168,7 +168,7 @@ def second_call_student_update_view(request, pk):
             form = UpdateStudentSecondForm(request.POST or None, instance=student)
             if form.is_valid():
                 form.save()
-                success_message = f'Учень <strong>{form.student_full_name}</strong> успішно оновлений'
+                success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
                 messages.success(request, mark_safe(success_message))
                 return redirect('second_call', pk=student.center.pk)
             else:

@@ -92,7 +92,6 @@ class UpdateStudentFirstForm(forms.ModelForm):
         # if self.instance and self.instance.pk:
         #     self.fields['first_call'].initial = self.instance.first_call
 
-
     class Meta:
         model = Student
         fields = '__all__'
