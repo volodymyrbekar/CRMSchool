@@ -25,6 +25,7 @@ class CreateStudentForm(forms.ModelForm):
     student_full_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     student_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     parent_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    parent_full_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput())
     school = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     class_number = forms.IntegerField(required=True, widget=forms.NumberInput())
     center = forms.ModelChoiceField(
@@ -35,7 +36,7 @@ class CreateStudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['student_full_name', 'student_phone_number', 'parent_phone_number', 'school', 'class_number', 'center']
+        fields = ['student_full_name', 'student_phone_number', 'parent_phone_number',  'parent_full_name', 'school', 'class_number', 'center']
 
     def __init__(self, *args, **kwargs):
         super(CreateStudentForm, self).__init__(*args, **kwargs)
@@ -48,6 +49,9 @@ class CreateStudentForm(forms.ModelForm):
 
         self.fields['parent_phone_number'].widget.attrs['class'] = 'form-control'
         self.fields['parent_phone_number'].widget.attrs['placeholder'] = 'Номер Телефону Батьків'
+
+        self.fields['parent_full_name'].widget.attrs['class'] = 'form-control'
+        self.fields['parent_full_name'].widget.attrs['placeholder'] = 'ПІБ Батьків'
 
         self.fields['school'].widget.attrs['class'] = 'form-control'
         self.fields['school'].widget.attrs['placeholder'] = 'Назва Школи'
