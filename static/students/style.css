@@ -12,6 +12,29 @@ h2 {
   color: black;
 }
 
+/* Add styles for the navbar */
+.navbar {
+    background-color: #2e073f; /* Change this to the desired color */
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white; /* Change this to the desired text color */
+}
+
+
+.navbar .nav-link:hover {
+    color: #FFD700; /* Change this to the desired hover color */
+}
+
+/* Ensure the logo color does not change on hover */
+.navbar .navbar-brand:hover {
+    color: white; /* Keep the logo color white on hover */
+}
+
+
+
+
 .container {
   width: 100%;
 }
