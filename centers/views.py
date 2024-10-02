@@ -162,10 +162,14 @@ def second_call_student_update_view(request, pk):
     try:
         student = get_object_or_404(Student, id=pk)
         form = UpdateStudentSecondForm(center_instance=student.center, instance=student)
+        User = get_user_model()
+        all_users = User.objects.all()
         context = {
             'title': 'Другий дзвінок',
             'form': form,
             'student_obj': student,
+            'user': request.user,
+            'operators': all_users,
         }
         if request.method == 'POST':
             form = UpdateStudentSecondForm(request.POST or None, center_instance=student.center, instance=student)

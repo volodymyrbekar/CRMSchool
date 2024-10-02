@@ -34,6 +34,15 @@
         </p>
     </div>
 
+    <!-- parent_full_name -->
+    <div class="form-group">
+        <p>
+        <label for="parent_full_name">ПІБ батьків:</label>
+        <input type="text" id="parent_full_name" class="form-control" value="{{ student_obj.parent_full_name }}" readonly>
+        <input type="hidden" name="parent_full_name" value="{{ student_obj.parent_full_name }}">
+        </p>
+    </div>
+
     <!-- school -->
     <div class="form-group">
         <p>
@@ -98,8 +107,19 @@
     </div>
 
     <hr>
-        <label>Оператор:</label>
-        <p>{{ form.second_call }}</p>
+       <label>Оператор:</label>
+        <p>
+            <select id="second_call" name="second_call" class="form-control">
+               {% for operator in operators %}
+                  <option value="{{ operator.username }}"
+                      {% if student_obj.second_call == operator.username or not student_obj.second_call and operator.username == user.username %}
+                      selected
+                      {% endif %}>
+                      {{ operator.username }}
+                  </option>
+               {% endfor %}
+            </select>
+        </p>
 
         <label>Статус другого дзвінка:</label>
         <p>{{ form.second_call_satus }}</p>

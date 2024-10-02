@@ -157,9 +157,6 @@ class UpdateStudentFirstForm(forms.ModelForm):
         all_users = User.objects.all()
         self.fields['first_call'].choices = [(user.username, user.username) for user in all_users]
 
-        if self.instance and self.instance.pk:
-            self.fields['parent_phone_number'].initial = self.instance.parent_phone_number
-            self.fields['parent_full_name'].initial = self.instance.parent_full_name
 
     def save(self, commit=True):
         instance = super(UpdateStudentFirstForm, self).save(commit=False)
@@ -176,7 +173,8 @@ class UpdateStudentFirstForm(forms.ModelForm):
 
 
 class UpdateStudentSecondForm(forms.ModelForm):
-    second_call = forms.CharField(
+    second_call = forms.ChoiceField(
+        choices=[],
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'})
     )
@@ -200,17 +198,20 @@ class UpdateStudentSecondForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         center_instance = kwargs.pop('center_instance', None)
+        user_instance = kwargs.pop('user_instance', None)
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
         self.fields['add_to_group'].queryset = GroupPermanent.objects.filter(center=center_instance)
 
         User = get_user_model()
-        operators = User.objects.filter(role__in=['operator', 'administrator'])
-        self.fields['second_call'] = forms.ModelChoiceField(
-            queryset=operators,
-            empty_label=None,
-            widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Оператор'})
-        )
+        all_users = User.objects.all()
+        self.fields['second_call'].choices = [(user.username, user.username) for user in all_users]
+
+        if self.instance and self.instance.pk:
+            self.fields['second_call'].initial = self.instance.second_call
+        else:
+            self.fields['second_call'].initial = user_instance.username
+
 
     class Meta:
         model = Student
