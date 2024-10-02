@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.http import Http404
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
 
@@ -130,28 +131,29 @@ def create_student_with_token(request, pk, token):
 @login_required
 @permission_required('users.can_edit_first_call', raise_exception=True)
 def first_call_student_update_view(request, pk):
-    try:
-        student = get_object_or_404(Student, id=pk)
-        form = UpdateStudentFirstForm(center_instance=student.center, instance=student, )
-        context = {
-            'title': 'Перший дзвінок',
-            'form': form,
-            'student_obj': student,
-        }
-        if request.method == 'POST':
-            form = UpdateStudentFirstForm(request.POST or None, center_instance=student.center, instance=student)
-            if form.is_valid():
-                form.save()
-                success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
-                messages.success(request, mark_safe(success_message))
-                return redirect('first_call', pk=student.center.pk)
-            else:
-                # print(form.errors)
-                messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
-        return render(request, 'students/first_call_student_update.html', context)
-    except Student.DoesNotExist:
-        messages.error(request, "Студент із зазначеним id не знайдений")
-        return redirect('centers_list')
+    student = get_object_or_404(Student, id=pk)
+    form = UpdateStudentFirstForm(center_instance=student.center, instance=student)
+    User = get_user_model()
+    all_users = User.objects.all()
+    context = {
+        'title': 'Перший дзвінок',
+        'form': form,
+        'student_obj': student,
+        'user': request.user,
+        'operators': all_users,
+    }
+    if request.method == 'POST':
+        form = UpdateStudentFirstForm(request.POST or None, center_instance=student.center, instance=student)
+        if form.is_valid():
+            form.save()
+            success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
+            messages.success(request, mark_safe(success_message))
+            return redirect('first_call', pk=student.center.pk)
+        else:
+            # print(form.errors)
+            messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
+    return render(request, 'students/first_call_student_update.html', context)
+
 
 
 @login_required

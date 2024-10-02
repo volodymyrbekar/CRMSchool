@@ -20,12 +20,27 @@
 
 <div class="btn-group">
   <select class="form-control" id="operatorDropdown">
-     <option value="">All Operators</option>
+     <option value="">Оператори</option>
     {% for operator in operators %}
         <option value="{{ operator.username }}">{{ operator.username }}</option>
     {% endfor %}
   </select>
 </div>
+
+  <div class="btn-group">
+    <select id="second-call-status-filter" class="form-control">
+        <option value="">Статус другого дзвінка</option>
+        <option value="Так, прийдуть на звичайне">Так, прийдуть на звичайне</option>
+        <option value="Ні">Ні</option>
+        <option value="Думають">Думають</option>
+        <option value="На наступний тиждень">На наступний тиждень</option>
+        <option value="Передзвонити пізніше">Передзвонити пізніше</option>
+        <option value="Примітка">Примітка</option>
+        <option value="Не беруть телефон">Не беруть телефон</option>
+    </select>
+  </div>
+
+
 
 <table class="styled-table" >
   <thead>
@@ -86,20 +101,30 @@
 
 {% endif %}
 <script>
-  window.onload = function() {
-    var dropdown = document.querySelector('.form-control');
-    dropdown.addEventListener('change', function() {
-        var operatorUsername = this.options[this.selectedIndex].value.trim().toLowerCase();
-        var rows = document.querySelectorAll('.second-call-row');
+window.onload = function() {
+    var operatorDropdown = document.querySelector('#operatorDropdown');
+    var secondCallStatusFilter = document.querySelector('#second-call-status-filter');
+    var rows = document.querySelectorAll('.second-call-row');
+
+    operatorDropdown.addEventListener('change', filterRows);
+    secondCallStatusFilter.addEventListener('change', filterRows);
+
+    function filterRows() {
+        var operatorUsername = operatorDropdown.value.trim().toLowerCase();
+        var selectedStatus = secondCallStatusFilter.value.trim();
+
         rows.forEach(function(row) {
-            var rowOperator = row.dataset.operator.trim().toLowerCase();
-            if (operatorUsername === "" || rowOperator === operatorUsername) {
+            var rowOperator = row.dataset.operator ? row.dataset.operator.trim().toLowerCase() : "";
+            var statusCell = row.querySelector('td:nth-child(13)').textContent.trim(); // Adjust the index if needed
+
+            if ((operatorUsername === "" || rowOperator === operatorUsername) &&
+                (selectedStatus === "" || statusCell === selectedStatus)) {
                 row.style.display = "";
             } else {
                 row.style.display = "none";
             }
         });
-    });
+    }
 };
 </script>
 {% endif %}

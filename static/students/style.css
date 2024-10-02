@@ -172,4 +172,38 @@ styled-table tbody tr.active-row {
 }
 
 
+/* Style the filter container */
+.filter-container {
+    margin-bottom: 20px;
+}
 
+.filter-container label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.filter-container .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+}
+/* Style the filter container to display filters in one line */
+.filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust the gap between filters as needed */
+    margin-bottom: 5px;
+}
+
+/* Add distance from the filter container to the table header */
+.filter-container + .styled-table {
+    margin-top: 10px;
+}
+
+/* Make the first option in select elements bold */
+select option:first-child {
+    font-weight: bold;
+}
+.custom-spacing {
+    margin-bottom: 20px; /* Adjust the value to your preference */
+}

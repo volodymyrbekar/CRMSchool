@@ -92,6 +92,12 @@ class UpdateStudentFirstForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Parent Phone Number'}),
         label=""
     )
+    parent_full_name = forms.CharField(
+        required=False,
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Parent Full Name'}),
+        label=""
+    )
     school = forms.CharField(
         required=False,
         max_length=50,
@@ -111,7 +117,7 @@ class UpdateStudentFirstForm(forms.ModelForm):
         label=""
     )
 
-    first_call = forms.ChoiceField(widget=forms.Select())
+    first_call = forms.ChoiceField(choices=[], required=True, widget=forms.Select())
     first_call_satus = forms.ChoiceField(
         required=True,
         choices=CHOICES_FIRST_CALL_STATUS,
@@ -143,20 +149,26 @@ class UpdateStudentFirstForm(forms.ModelForm):
         self.fields.pop('center')
 
         self.fields['trial_registration'].queryset = GroupTrial.objects.filter(center=center_instance)
-        # self.fields['trial_registration'] = forms.ModelChoiceField(
-        #     required=False,
-        #     queryset=GroupTrial.objects.all(),
-        #     empty_label='----',
-        #     widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Реєстрація на пробне'}),
-        #     label="Реєстрація на пробне"
-        # )
+
+        if self.instance and self.instance.pk:
+            self.fields['trial_registration'].initial = self.instance.trial_registration
+
         User = get_user_model()
-        operators = User.objects.filter(role__in=['operator', 'administrator'])
-        self.fields['first_call'] = forms.ModelChoiceField(
-            queryset=operators,
-            empty_label=None,
-            widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Оператор'})
-        )
+        all_users = User.objects.all()
+        self.fields['first_call'].choices = [(user.username, user.username) for user in all_users]
+
+        if self.instance and self.instance.pk:
+            self.fields['parent_phone_number'].initial = self.instance.parent_phone_number
+            self.fields['parent_full_name'].initial = self.instance.parent_full_name
+
+    def save(self, commit=True):
+        instance = super(UpdateStudentFirstForm, self).save(commit=False)
+        instance.first_call = self.cleaned_data.get('first_call')
+        instance.parent_phone_number = self.cleaned_data.get('parent_phone_number')
+        instance.parent_full_name = self.cleaned_data.get('parent_full_name')
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Student
