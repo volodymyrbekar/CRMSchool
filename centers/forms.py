@@ -6,6 +6,7 @@ from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_SECOND_CALL_STATUS, CHOI
 
 logger = logging.getLogger(__name__)
 
+
 class CreateCenterForm(forms.ModelForm):
     center_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва центру'}), label="")
     location = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Локація'}), label="")
@@ -60,7 +61,6 @@ class CreateStudentForm(forms.ModelForm):
 
         self.fields['class_number'].widget.attrs['class'] = 'form-control'
         self.fields['class_number'].widget.attrs['placeholder'] = 'Клас'
-
 
     def clean(self):
         optional_fields = ['first_call', 'first_call_status', 'trial_registration', 'comment_first_call',
@@ -204,7 +204,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
         user_instance = kwargs.pop('user_instance', None)
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-
+        self.fields['add_to_group'].required = False
         if center_instance:
             self.fields['add_to_group'].queryset = GroupPermanent.objects.filter(center=center_instance)
 
@@ -237,7 +237,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['second_call', 'second_call_satus', 'add_to_group', 'comment_second_call', 'center']
 
 
 class CreateGroupTrialForm(forms.ModelForm):

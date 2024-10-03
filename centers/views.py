@@ -135,17 +135,25 @@ def first_call_student_update_view(request, pk):
     form = UpdateStudentFirstForm(center_instance=student.center, instance=student)
     User = get_user_model()
     all_users = User.objects.all()
+    group_trials = GroupTrial.objects.filter(center=student.center)
     context = {
         'title': 'Перший дзвінок',
         'form': form,
         'student_obj': student,
         'user': request.user,
         'operators': all_users,
+        'group_trials': group_trials,
     }
     if request.method == 'POST':
         form = UpdateStudentFirstForm(request.POST, center_instance=student.center, instance=student)
         if form.is_valid():
-            form.save()
+            student = form.save(commit=False)
+            group_trial_id = request.POST.get('group_trial')
+            if group_trial_id:
+                student.trial_registration = GroupTrial.objects.get(id=group_trial_id)
+            else:
+                student.trial_registration = None
+            student.save()
             success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
             messages.success(request, mark_safe(success_message))
             return redirect('first_call', pk=student.center.pk)
@@ -163,22 +171,33 @@ def second_call_student_update_view(request, pk):
         form = UpdateStudentSecondForm(center_instance=student.center, instance=student)
         User = get_user_model()
         all_users = User.objects.all()
+        group_permanents = GroupPermanent.objects.filter(center=student.center)
         context = {
             'title': 'Другий дзвінок',
             'form': form,
             'student_obj': student,
             'user': request.user,
             'operators': all_users,
+            'group_permanents': group_permanents,
         }
         if request.method == 'POST':
             form = UpdateStudentSecondForm(request.POST or None, center_instance=student.center, instance=student)
             if form.is_valid():
-                form.save()
+                student = form.save(commit=False)
+                group_id = request.POST.get('add_to_group')
+                if group_id:
+                    # Assign the selected group to the student
+                    student.add_to_group = GroupPermanent.objects.get(id=group_id)
+                else:
+                    # If no group selected, set it to None
+                    student.add_to_group = None
+
+                student.save()
                 success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
                 messages.success(request, mark_safe(success_message))
                 return redirect('second_call', pk=student.center.pk)
             else:
-                # print(form.errors)
+                print(form.errors)
                 messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
         return render(request, 'students/second_call_student_update.html', context)
     except Student.DoesNotExist:

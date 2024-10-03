@@ -124,8 +124,18 @@
         <label>Статус другого дзвінка:</label>
         <p>{{ form.second_call_satus }}</p>
 
-        <label>Група постійне:</label>
-        <p>{{ form.add_to_group }}</p>
+        <div class="form-group">
+            <label for="add_to_group">Група постійне:</label>
+            <select id="add_to_group" name="add_to_group" class="form-control custom-spacing">
+                <option value="">-- Виберіть групу --</option>
+                {% for group in group_permanents %}
+                    <option value="{{ group.id }}"
+                        {% if student_obj.add_to_group and student_obj.add_to_group.id == group.id %}selected{% endif %}>
+                        {{ group.group_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
         <label>Кометар:</label>
         <p>{{ form.comment_second_call }}</p>

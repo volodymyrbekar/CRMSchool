@@ -78,8 +78,17 @@
         <label>Статус першого дзвінка:</label>
         <p>{{ form.first_call_satus |default_if_none:"" }}</p>
 
-        <label>Запис на пробне:</label>
-        <p>{{ form.trial_registration | default_if_none:"" }}</p>
+        <div class="form-group">
+            <label for="group_trial">Група пробна:</label>
+            <select id="group_trial" name="group_trial" class="form-control custom-spacing">
+                <option value="">-- Виберіть групу --</option>
+                {% for group in group_trials %}
+                    <option value="{{ group.id }}" {% if student_obj.trial_registration and student_obj.trial_registration.id == group.id %}selected{% endif %}>
+                        {{ group.group_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
 
         <label>Статус пробного:</label>
         <p>{{ form.trial_status  | default_if_none:""  }}</p>
