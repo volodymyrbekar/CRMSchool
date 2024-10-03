@@ -1,8 +1,10 @@
 from django import forms
+import logging
 from django.contrib.auth import get_user_model
 from .models import Center, Student, GroupTrial, GroupPermanent
 from .choices import CHOICES_FIRST_CALL_STATUS, CHOICES_SECOND_CALL_STATUS, CHOICES_TRIAL_STATUS
 
+logger = logging.getLogger(__name__)
 
 class CreateCenterForm(forms.ModelForm):
     center_name = forms.CharField(required=True, max_length=80, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Назва центру'}), label="")
@@ -148,7 +150,8 @@ class UpdateStudentFirstForm(forms.ModelForm):
         super(UpdateStudentFirstForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
 
-        self.fields['trial_registration'].queryset = GroupTrial.objects.filter(center=center_instance)
+        if center_instance:
+            self.fields['trial_registration'].queryset = GroupTrial.objects.filter(center=center_instance)
 
         if self.instance and self.instance.pk:
             self.fields['trial_registration'].initial = self.instance.trial_registration
@@ -157,12 +160,12 @@ class UpdateStudentFirstForm(forms.ModelForm):
         all_users = User.objects.all()
         self.fields['first_call'].choices = [(user.username, user.username) for user in all_users]
 
-
     def save(self, commit=True):
         instance = super(UpdateStudentFirstForm, self).save(commit=False)
         instance.first_call = self.cleaned_data.get('first_call')
         instance.parent_phone_number = self.cleaned_data.get('parent_phone_number')
         instance.parent_full_name = self.cleaned_data.get('parent_full_name')
+        instance.trial_registration = self.cleaned_data.get('trial_registration')
         if commit:
             instance.save()
         return instance
@@ -201,7 +204,9 @@ class UpdateStudentSecondForm(forms.ModelForm):
         user_instance = kwargs.pop('user_instance', None)
         super(UpdateStudentSecondForm, self).__init__(*args, **kwargs)
         self.fields.pop('center')
-        self.fields['add_to_group'].queryset = GroupPermanent.objects.filter(center=center_instance)
+
+        if center_instance:
+            self.fields['add_to_group'].queryset = GroupPermanent.objects.filter(center=center_instance)
 
         User = get_user_model()
         all_users = User.objects.all()
@@ -212,6 +217,23 @@ class UpdateStudentSecondForm(forms.ModelForm):
         else:
             self.fields['second_call'].initial = user_instance.username
 
+    def clean(self):
+        data = super().clean()
+        if self.errors:
+            logger.error(f"Form validation errors: {self.errors}")
+
+        return data
+
+    def save(self, commit=True):
+        instance = super(UpdateStudentSecondForm, self).save(commit=False)
+        instance.second_call = self.cleaned_data.get('second_call')
+        instance.second_call_satus = self.cleaned_data.get('second_call_satus')
+        instance.add_to_group = self.cleaned_data.get('add_to_group')
+        instance.comment_second_call = self.cleaned_data.get('comment_second_call')
+
+        if commit:
+            instance.save()
+        return instance
 
     class Meta:
         model = Student

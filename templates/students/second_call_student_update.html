@@ -12,7 +12,7 @@
         <p>
         <label for="student_full_name">Повне ім'я:</label>
         <input type="text" id="student_full_name" class="form-control" value="{{ student_obj.student_full_name }}" readonly>
-        <input type="hidden"  name="student_full_name" value="{{ student_obj.student_full_name }}">
+        <input type="hidden"  name="student_full_name" value="{{ student_obj.student_full_name |default_if_none:'' }}">
         </p>
     </div>
 
@@ -21,7 +21,7 @@
         <p>
         <label for="student_phone_number">Номер телефону студента:</label>
         <input type="text" id="student_phone_number" class="form-control" value="{{ student_obj.student_phone_number }}" readonly>
-        <input type="hidden" name="student_phone_number" value="{{ student_obj.student_phone_number }}">
+        <input type="hidden" name="student_phone_number" value="{{ student_obj.student_phone_number |default_if_none:'' }}">
         </p>
     </div>
 
@@ -30,7 +30,7 @@
         <p>
         <label for="parent_phone_number">Номер телефону батьків:</label>
         <input type="text" id="parent_phone_number" class="form-control" value="{{ student_obj.parent_phone_number }}" readonly>
-        <input type="hidden" name="parent_phone_number" value="{{ student_obj.parent_phone_number }}">
+        <input type="hidden" name="parent_phone_number" value="{{ student_obj.parent_phone_number |default_if_none:'' }}">
         </p>
     </div>
 
@@ -39,7 +39,7 @@
         <p>
         <label for="parent_full_name">ПІБ батьків:</label>
         <input type="text" id="parent_full_name" class="form-control" value="{{ student_obj.parent_full_name }}" readonly>
-        <input type="hidden" name="parent_full_name" value="{{ student_obj.parent_full_name }}">
+        <input type="hidden" name="parent_full_name" value="{{ student_obj.parent_full_name |default_if_none:'' }}">
         </p>
     </div>
 
@@ -48,7 +48,7 @@
         <p>
         <label for="school">Школа:</label>
         <input type="text" id="school" class="form-control" value="{{ student_obj.school|default_if_none:''}}" readonly>
-        <input type="hidden" name="school" value="{{ student_obj.school }}">
+        <input type="hidden" name="school" value="{{ student_obj.school |default_if_none:'' }}">
         </p>
     </div>
 
@@ -57,7 +57,7 @@
         <p>
         <label for="class_number">Клас:</label>
         <input type="text" id="class_number" class="form-control" value=" {{ student_obj.class_number|default_if_none:''}}" readonly>
-        <input type="hidden" name="class_number" value="{{ student_obj.class_number }}">
+        <input type="hidden" name="class_number" value="{{ student_obj.class_number |default_if_none:'' }}">
         </p>
     </div>
 
@@ -66,7 +66,7 @@
         <p>
         <label for="first_call">Оператор першого дзвінка:</label>
         <input type="text" id="first_call" class="form-control" value=" {{ student_obj.first_call|default_if_none:''}}" readonly>
-        <input type="hidden" name="first_call" value="{{ student_obj.first_call }}">
+        <input type="hidden" name="first_call" value="{{ student_obj.first_call |default_if_none:'' }}">
         </p>
     </div>
 
@@ -75,7 +75,7 @@
         <p>
         <label for="first_call_satus">Статус першого дзвінка:</label>
         <input type="text" id="first_call_satus" class="form-control" value=" {{ student_obj.first_call_satus|default_if_none:''}}" readonly>
-        <input type="hidden" name="first_call_satus" value="{{ student_obj.first_call_satus }}">
+        <input type="hidden" name="first_call_satus" value="{{ student_obj.first_call_satus |default_if_none:'' }}">
         </p>
     </div>
 
@@ -84,7 +84,7 @@
         <p>
         <label for="trial_registration">Запис на пробне:</label>
         <input type="text" id="trial_registration" class="form-control" value=" {{ student_obj.trial_registration}}" readonly>
-        <input type="hidden" name="trial_registration" value="{{ student_obj.trial_registration }}">
+        <input type="hidden" name="trial_registration" value="{{ student_obj.trial_registration |default_if_none:'' }}">
         </p>
     </div>
 
@@ -93,7 +93,7 @@
         <p>
         <label for="trial_status">Статус пробного:</label>
         <input type="text" id="trial_status" class="form-control" value=" {{ student_obj.trial_status}}" readonly>
-        <input type="hidden" name="trial_status" value="{{ student_obj.trial_status }}">
+        <input type="hidden" name="trial_status" value="{{ student_obj.trial_status |default_if_none:'' }}">
         </p>
     </div>
 
@@ -102,7 +102,7 @@
         <p>
         <label for="comment_first_call">Коментар:</label>
         <input type="text" id="comment_first_call" class="form-control" value=" {{ student_obj.comment_first_call|default_if_none:''}}" readonly>
-        <input type="hidden" name="comment_first_call" value="{{ student_obj.comment_first_call }}">
+        <input type="hidden" name="comment_first_call" value="{{ student_obj.comment_first_call|default_if_none:'' }}">
         </p>
     </div>
 

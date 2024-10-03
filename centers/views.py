@@ -143,7 +143,7 @@ def first_call_student_update_view(request, pk):
         'operators': all_users,
     }
     if request.method == 'POST':
-        form = UpdateStudentFirstForm(request.POST or None, center_instance=student.center, instance=student)
+        form = UpdateStudentFirstForm(request.POST, center_instance=student.center, instance=student)
         if form.is_valid():
             form.save()
             success_message = f'Учень <strong>{form.instance.student_full_name}</strong> успішно оновлений'
@@ -153,7 +153,6 @@ def first_call_student_update_view(request, pk):
             # print(form.errors)
             messages.error(request, 'Помилка валідації форми. Будь ласка, перевірте дані')
     return render(request, 'students/first_call_student_update.html', context)
-
 
 
 @login_required
