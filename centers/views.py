@@ -47,12 +47,11 @@ def create_center_view(request):
 
 @login_required
 def student_list_view(request, pk):
-    print(request.user.__dict__)
     try:
         center_obj = Center.objects.get(pk=pk)
     except Center.DoesNotExist:
         raise Http404("Center does not exist")
-    student_obj = Student.objects.filter(center_id=pk).order_by('-student_add_date').all()
+    student_obj = Student.objects.filter(center_id=pk).order_by('student_add_date').all()
 
     paginator = Paginator(student_obj, 50)  # Show 10 students per page
     page_number = request.GET.get('page')
@@ -230,7 +229,7 @@ def group_detail_trial_view(request, pk):
         center = group_trial_obj.center
     except GroupTrial.DoesNotExist:
         raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj).order_by('-student_add_date')
+    student_obj = Student.objects.filter(center=center, trial_registration=group_trial_obj).order_by('student_add_date')
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page
@@ -271,7 +270,7 @@ def group_detail_view(request, pk):
         center = group_obj.center
     except GroupPermanent.DoesNotExist:
         raise Http404("Group does not exist")
-    student_obj = Student.objects.filter(center=center, add_to_group=group_obj).order_by('-student_add_date')
+    student_obj = Student.objects.filter(center=center, add_to_group=group_obj).order_by('student_add_date')
     breadcrumbs = [
         ('Центри', '/centers/'),  # Centers list page
         (center.center_name, f'/centers/{center.id}/students'),  # Current center page
@@ -331,7 +330,7 @@ def second_call_view(request, pk):
         else:
             student_obj = Student.objects.filter(
                 center=center_obj).filter(
-                first_call_satus='Так, прийдуть на пробне').order_by('-student_add_date')
+                first_call_satus='Так, прийдуть на пробне').order_by('student_add_date')
     except Center.DoesNotExist:
         raise Http404("Центр не знайдений")
 

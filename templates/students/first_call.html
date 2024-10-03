@@ -49,8 +49,9 @@
 <table class="styled-table">
   <thead>
     <tr>
-      <th scope="col">ПІБ</th>
-      <th scope="col">Номер Телефону</th>
+        <th scope="col">ID</th>
+        <th scope="col">ПІБ</th>
+        <th scope="col">Номер Телефону</th>
         <th scope="col">Номер Телефону Батьків</th>
         <th scope="col">ПІБ Батьків</th>
         <th scope="col">Школа</th>
@@ -68,6 +69,7 @@
       {% if center_obj %}
         {% for student in student_obj %}
         <tr class="first-call-row active-row" data-operator="{{ student.first_call }}">
+            <td>{{ student.pk }}</td>
             <td>{{ student.student_full_name |default_if_none:""}}</td>
             <td>{{ student.student_phone_number |default_if_none:""}}</td>
             <td>{{ student.parent_phone_number |default_if_none:""}}</td>

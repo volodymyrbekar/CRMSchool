@@ -71,6 +71,7 @@
     <table class="styled-table">
         <thead>
         <tr>
+            <th scope="col">ID</th>
             <th scope="col">ПІБ</th>
             <th scope="col">Номер Телефону</th>
             <th scope="col">Номер Телефону Батьків</th>
@@ -85,6 +86,7 @@
         {% if center_obj %}
         {% for student in student_obj_page %}
         <tr>
+            <td>{{ student.id }}</td>
             <td>{{ student.student_full_name }}</td>
             <td>{{ student.student_phone_number }}</td>
             <td>{{ student.parent_phone_number }}</td>
