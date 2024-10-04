@@ -295,6 +295,11 @@ def first_call_view(request, pk):
         student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         if selected_operator:
             student_obj = student_obj.filter(first_call=selected_operator)
+
+        # Add pagination
+        paginator = Paginator(student_obj, 50)  # Show 10 students per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:
         raise Http404("Центр не знайдений")
 
@@ -307,7 +312,7 @@ def first_call_view(request, pk):
     context = {
         'title': 'Перший дзвінок',
         # 'students': students,
-        'student_obj': student_obj,
+        'student_obj': page_obj,
         'center_obj': center_obj,
         'operators': operators,
         'breadcrumbs': breadcrumbs,
@@ -331,6 +336,10 @@ def second_call_view(request, pk):
             student_obj = Student.objects.filter(
                 center=center_obj).filter(
                 first_call_satus='Так, прийдуть на пробне').order_by('student_add_date')
+
+        paginator = Paginator(student_obj, 5)  # Show 10 students per page
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:
         raise Http404("Центр не знайдений")
 
@@ -343,7 +352,7 @@ def second_call_view(request, pk):
     context = {
         'title': 'Другий дзвінок',
         'center_obj': center_obj,
-        'student_obj': student_obj,
+        'student_obj': page_obj,
         'operators': operators,
         'breadcrumbs': breadcrumbs,
     }

@@ -97,6 +97,25 @@
       {% endif %}
     </tbody>
   </table>
+
+    <div class="pagination">
+        {% if student_obj.has_previous %}
+            <a href="?page={{ student_obj.previous_page_number }}" class="prev">Назад</a>
+        {% endif %}
+        <div class="page-numbers">
+            {% for i in student_obj.paginator.page_range %}
+                {% if student_obj.number == i %}
+                    <span class="current">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% if student_obj.has_next %}
+            <a href="?page={{ student_obj.next_page_number }}" class="next">Вперед</a>
+        {% endif %}
+    </div>
+
 </div>
 {% else %}
     <h2>Немає учнів для дзвінка</h2>
