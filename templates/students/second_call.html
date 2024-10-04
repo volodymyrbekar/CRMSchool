@@ -52,7 +52,7 @@
         <th scope="col">ПІБ Батьків</th>
         <th scope="col">Школа</th>
         <th scope="col">Клас</th>
-<!--        <th scope="col">Дата додавання</th>-->
+<!--    <th scope="col">Дата додавання</th>-->
         <th scope="col">Перший дзвінок оператор</th>
         <th scope="col">Статус Першого Дзвінка</th>
         <th scope="col">Запис на пробне</th>
@@ -71,7 +71,7 @@
       {% if center_obj %}
         {% for student in student_obj %}
         <tr class="second-call-row" data-operator="{{ student.second_call }}">
-            <td>{{ student.pk }}</td>
+            <td>{{ student.order }}</td>
             <td>{{ student.student_full_name }}</td>
             <td>{{ student.student_phone_number }}</td>
             <td>{{ student.parent_phone_number }}</td>

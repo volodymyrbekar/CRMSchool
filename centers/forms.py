@@ -172,7 +172,8 @@ class UpdateStudentFirstForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['student_full_name', 'student_phone_number', 'parent_phone_number', 'parent_full_name', 'school',
+                  'class_number', 'center', 'first_call', 'first_call_satus', 'trial_registration', 'trial_status', 'comment_first_call']
 
 
 class UpdateStudentSecondForm(forms.ModelForm):

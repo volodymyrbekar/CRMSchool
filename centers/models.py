@@ -56,6 +56,7 @@ class Student(models.Model):
     school = models.TextField(max_length=50, blank=True, null=True)
     class_number = models.PositiveIntegerField(default=1, choices=((i, i) for i in range(1, 12)))
     student_add_date = models.DateTimeField(auto_now_add=True)
+    order = models.PositiveIntegerField(default=0)
 
     first_call = models.CharField(max_length=80, blank=True, null=True)
     first_call_satus = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_STATUS)
