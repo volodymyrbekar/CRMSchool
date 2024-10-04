@@ -42,7 +42,6 @@ h2 {
 .second-call-page {
   width: 100%;
   position: absolute;
-  left: 40px;
 }
 
 .breadcrumb-link {
@@ -210,4 +209,9 @@ select option:first-child {
 
 .pagination {
     margin-bottom: 20px;
+}
+
+.center-table {
+    display: flex;
+    justify-content: center;
 }
