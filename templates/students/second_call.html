@@ -105,19 +105,19 @@
 <script>
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
-    var secondCallStatusFilter = document.querySelector('#second-call-status-filter');
+    var statusFilter = document.querySelector('#second-call-status-filter'); // Corrected the ID
     var rows = document.querySelectorAll('.second-call-row');
 
     operatorDropdown.addEventListener('change', filterRows);
-    secondCallStatusFilter.addEventListener('change', filterRows);
+    statusFilter.addEventListener('change', filterRows);
 
     function filterRows() {
         var operatorUsername = operatorDropdown.value.trim().toLowerCase();
-        var selectedStatus = secondCallStatusFilter.value.trim();
+        var selectedStatus = statusFilter.value.trim();
 
         rows.forEach(function(row) {
-            var rowOperator = row.dataset.operator ? row.dataset.operator.trim().toLowerCase() : "";
-            var statusCell = row.querySelector('td:nth-child(13)').textContent.trim(); // Adjust the index if needed
+            var rowOperator = row.dataset.operator.trim().toLowerCase();
+            var statusCell = row.querySelector('td:nth-child(14)').textContent.trim(); // Adjust the index to 14
 
             if ((operatorUsername === "" || rowOperator === operatorUsername) &&
                 (selectedStatus === "" || statusCell === selectedStatus)) {

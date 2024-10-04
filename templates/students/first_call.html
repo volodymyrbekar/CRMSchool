@@ -112,7 +112,7 @@ window.onload = function() {
 
         rows.forEach(function(row) {
             var rowOperator = row.dataset.operator.trim().toLowerCase();
-            var statusCell = row.querySelector('td:nth-child(8)').textContent.trim(); // Adjust the index if needed
+            var statusCell = row.querySelector('td:nth-child(9)').textContent.trim(); // Adjust the index to 9
 
             if ((operatorUsername === "" || rowOperator === operatorUsername) &&
                 (selectedStatus === "" || statusCell === selectedStatus)) {

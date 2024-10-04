@@ -321,12 +321,12 @@ def second_call_view(request, pk):
         center_obj = Center.objects.get(pk=pk)
         operators = CustomUser.objects.filter(role='operator')
         selected_operator = request.GET.get('operator')
-        student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
+        student_obj = Student.objects.filter(center=center_obj)
         if selected_operator:
             student_obj = student_obj.filter(
                 second_call=selected_operator,
                 first_call_satus='Так, прийдуть на пробне'
-            )
+            ).order_by('student_add_date')
         else:
             student_obj = Student.objects.filter(
                 center=center_obj).filter(
