@@ -337,7 +337,7 @@ def second_call_view(request, pk):
                 center=center_obj).filter(
                 first_call_satus='Так, прийдуть на пробне').order_by('student_add_date')
 
-        paginator = Paginator(student_obj, 5)  # Show 10 students per page
+        paginator = Paginator(student_obj, 50)  # Show 50 students per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:
