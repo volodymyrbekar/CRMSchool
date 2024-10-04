@@ -292,7 +292,7 @@ def first_call_view(request, pk):
         operators = CustomUser.objects.filter(role='operator')
         selected_operator = request.GET.get('operator')
         # students = Student.objects.filter(center=center_obj)
-        student_obj = Student.objects.filter(center=center_obj)
+        student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         if selected_operator:
             student_obj = student_obj.filter(first_call=selected_operator)
     except Center.DoesNotExist:
@@ -321,7 +321,7 @@ def second_call_view(request, pk):
         center_obj = Center.objects.get(pk=pk)
         operators = CustomUser.objects.filter(role='operator')
         selected_operator = request.GET.get('operator')
-        student_obj = Student.objects.filter(center=center_obj)
+        student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         if selected_operator:
             student_obj = student_obj.filter(
                 second_call=selected_operator,
