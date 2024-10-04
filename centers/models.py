@@ -72,3 +72,11 @@ class Student(models.Model):
     def __str__(self):
         return(f"{self.student_full_name} {self.student_phone_number} {self.parent_phone_number} {self.school}")
 
+    def save(self, *args, **kwargs):
+        if not self.pk:  # If the student is new
+            last_student = Student.objects.filter(center=self.center).order_by('order').last()
+            if last_student:
+                self.order = last_student.order + 1
+            else:
+                self.order = 1
+        super().save(*args, **kwargs)
