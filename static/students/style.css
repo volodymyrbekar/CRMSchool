@@ -225,7 +225,7 @@ select option:first-child {
     margin-left: 10px; /* Space between the dropdown and count */
     font-weight: bold;  /* Make count text bold */
     color: #2e073f;     /* color of the nav for the counts */
-    font-size: 14px;    /* Adjust font size */
+    font-size: 13px;    /* Adjust font size */
     width: auto;        /* Auto width for dynamic content */
     display: none;      /* Initially hidden */
     height: 100%;       /* Full height to align with dropdown */
@@ -247,4 +247,10 @@ select option:first-child {
 
 .clear-filters:hover {
     background-color: #c82333; /* Darker red on hover */
+}
+
+.bold-text {
+    font-weight: bold;
+    color: #2e073f;
+    font-size: 13px;
 }

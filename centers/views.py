@@ -294,6 +294,7 @@ def first_call_view(request, pk):
         selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
         student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
+        all_students = student_obj.count()
         if selected_operator:
             student_obj = student_obj.filter(first_call=selected_operator)
         if selected_status:
@@ -302,7 +303,7 @@ def first_call_view(request, pk):
         total_count = student_obj.count()
 
         # Add pagination
-        paginator = Paginator(student_obj, 10)  # Show 50 students per page
+        paginator = Paginator(student_obj, 50)  # Show 50 students per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:
@@ -324,6 +325,7 @@ def first_call_view(request, pk):
         'selected_status': selected_status,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
+        'all_students': all_students
     }
     return render(request, 'students/first_call.html', context)
 
@@ -333,17 +335,22 @@ def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
         operators = CustomUser.objects.filter(role='operator')
+
         selected_operator = request.GET.get('operator')
-        student_obj = Student.objects.filter(center=center_obj)
+        selected_status = request.GET.get('status')
+
+        student_obj = Student.objects.filter(center=center_obj, first_call_status='Так, прийдуть на пробне').order_by('student_add_date')
+        all_students = student_obj.count()
+
+        # Apply operator filter if selected
         if selected_operator:
-            student_obj = student_obj.filter(
-                second_call=selected_operator,
-                first_call_status='Так, прийдуть на пробне'
-            ).order_by('student_add_date')
-        else:
-            student_obj = Student.objects.filter(
-                center=center_obj).filter(
-                first_call_status='Так, прийдуть на пробне').order_by('student_add_date')
+            student_obj = student_obj.filter(second_call=selected_operator)
+
+        # Apply status filter if selected
+        if selected_status:
+            student_obj = student_obj.filter(second_call_status=selected_status)
+
+        total_count = student_obj.count()
 
         paginator = Paginator(student_obj, 50)  # Show 50 students per page
         page_number = request.GET.get('page')
@@ -362,8 +369,11 @@ def second_call_view(request, pk):
         'center_obj': center_obj,
         'student_obj': page_obj,
         'operators': operators,
-
+        'selected_operator': selected_operator,
+        'selected_status': selected_status,
         'breadcrumbs': breadcrumbs,
+        'total_count': total_count,
+        'all_students': all_students
     }
     return render(request, 'students/second_call.html', context)
 

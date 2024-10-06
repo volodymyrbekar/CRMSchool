@@ -47,6 +47,7 @@
         </div>
         <!-- Clear Filters Button -->
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
+        <span class="bold-text">Всі учні - {{ all_students }}</span>
     </div>
 
     <!-- Table Header -->
@@ -60,11 +61,11 @@
                 <th scope="col">ПІБ Батьків</th>
                 <th scope="col">Школа</th>
                 <th scope="col">Клас</th>
-                <th scope="col">Перший дзвінок</th>
                 <th scope="col">Статус Першого Дзвінка</th>
                 <th scope="col">Запис на пробне</th>
                 <th scope="col">Статус Пробного</th>
                 <th scope="col">Коментар</th>
+                <th scope="col">Перший дзвінок</th>
                 <th scope="col">Редагувати</th>
             </tr>
         </thead>
@@ -79,11 +80,11 @@
                     <td>{{ student.parent_full_name|default_if_none:"" }}</td>
                     <td>{{ student.school|default_if_none:"" }}</td>
                     <td>{{ student.class_number|default_if_none:"" }}</td>
-                    <td>{{ student.first_call|default_if_none:"" }}</td>
                     <td>{{ student.first_call_status|default_if_none:"" }}</td>
                     <td>{{ student.trial_registration|default_if_none:"" }}</td>
                     <td>{{ student.trial_status|default_if_none:"" }}</td>
                     <td>{{ student.comment_first_call|default_if_none:"" }}</td>
+                    <td>{{ student.first_call|default_if_none:"" }}</td>
                     <td>
                         <a href="{% url 'student_update' pk=student.pk %}">
                             <button type="button" class="btn btn-link">Змінити</button>
@@ -93,7 +94,7 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="13" style="text-align: center;">Немає учнів для дзвінка :(</td>
+                    <td colspan="13" style="text-align: center;">Немає учнів за цим фільтром:(</td>
                 </tr>
             {% endif %}
         </tbody>
