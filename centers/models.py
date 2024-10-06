@@ -59,13 +59,13 @@ class Student(models.Model):
     order = models.PositiveIntegerField(default=0)
 
     first_call = models.CharField(max_length=80, blank=True, null=True)
-    first_call_satus = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_STATUS)
+    first_call_status = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_STATUS)
     trial_registration = models.ForeignKey(GroupTrial, on_delete=models.SET_NULL, null=True, blank=True)  # trial_registration запис на пробне
     trial_status = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_TRIAL_STATUS)  # чи був на пробному?
     comment_first_call = models.CharField(max_length=250, blank=True, null=True)
 
     second_call = models.CharField(max_length=80, blank=True, null=True)
-    second_call_satus = models.CharField(max_length=80, blank=True, null=True)
+    second_call_status = models.CharField(max_length=80, blank=True, null=True)
     add_to_group = models.ForeignKey(GroupPermanent, on_delete=models.SET_NULL, null=True, blank=True)
     comment_second_call = models.CharField(max_length=250, blank=True, null=True)
 

@@ -80,13 +80,13 @@
             <td>{{ student.class_number }}</td>
 <!--        <td>{{ student.student_add_date}}</td>-->
             <td>{{ student.first_call |default_if_none:""}}</td>
-            <td>{{ student.first_call_satus |default_if_none:""}}</td>
+            <td>{{ student.first_call_status |default_if_none:""}}</td>
             <td>{{ student.trial_registration |default_if_none:""}}</td>
             <td>{{ student.trial_status|default_if_none:"" }}</td>
             <td>{{ student.comment_first_call|default_if_none:"" }}</td>
 
             <td>{{ student.second_call |default_if_none:""}}</td>
-            <td>{{ student.second_call_satus |default_if_none:""}}</td>
+            <td>{{ student.second_call_status |default_if_none:""}}</td>
             <td>{{ student.add_to_group |default_if_none:""}}</td>
             <td>{{ student.comment_second_call |default_if_none:""}}</td>
             <td><a href="{% url 'student_update_second' pk=student.pk %}">

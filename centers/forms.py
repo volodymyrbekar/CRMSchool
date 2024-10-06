@@ -120,7 +120,7 @@ class UpdateStudentFirstForm(forms.ModelForm):
     )
 
     first_call = forms.ChoiceField(choices=[], required=True, widget=forms.Select())
-    first_call_satus = forms.ChoiceField(
+    first_call_status = forms.ChoiceField(
         required=True,
         choices=CHOICES_FIRST_CALL_STATUS,
         widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус першого дзвінка'}),
@@ -173,7 +173,7 @@ class UpdateStudentFirstForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['student_full_name', 'student_phone_number', 'parent_phone_number', 'parent_full_name', 'school',
-                  'class_number', 'center', 'first_call', 'first_call_satus', 'trial_registration', 'trial_status', 'comment_first_call']
+                  'class_number', 'center', 'first_call', 'first_call_status', 'trial_registration', 'trial_status', 'comment_first_call']
 
 
 class UpdateStudentSecondForm(forms.ModelForm):
@@ -182,7 +182,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Другий дзвінок'})
     )
-    second_call_satus = forms.ChoiceField(
+    second_call_status = forms.ChoiceField(
         required=False,
         choices=CHOICES_SECOND_CALL_STATUS,
         widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Статус другого дзвінка'})
@@ -228,7 +228,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(UpdateStudentSecondForm, self).save(commit=False)
         instance.second_call = self.cleaned_data.get('second_call')
-        instance.second_call_satus = self.cleaned_data.get('second_call_satus')
+        instance.second_call_status = self.cleaned_data.get('second_call_status')
         instance.add_to_group = self.cleaned_data.get('add_to_group')
         instance.comment_second_call = self.cleaned_data.get('comment_second_call')
 
@@ -238,7 +238,7 @@ class UpdateStudentSecondForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['second_call', 'second_call_satus', 'add_to_group', 'comment_second_call', 'center']
+        fields = ['second_call', 'second_call_status', 'add_to_group', 'comment_second_call', 'center']
 
 
 class CreateGroupTrialForm(forms.ModelForm):

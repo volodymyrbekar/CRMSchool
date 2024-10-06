@@ -4,144 +4,189 @@
 {% if user.is_authenticated %}
 
 {% for name, url in breadcrumbs %}
- {% if not forloop.last %}
-    <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
-{% else %}
- <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
-{% endif %}
+    {% if not forloop.last %}
+        <a href="{{ url }}" class="breadcrumb-link">{{ name }}</a>
+    {% else %}
+        <span class="breadcrumb-link breadcrumb-active">{{ name }}</span>
+    {% endif %}
+
     {% if not forloop.last %}<span class="breadcrumb-separator">&gt;</span>{% endif %}
 {% endfor %}
 
-
-{% if student_obj %}
 <div class="container">
+    <h2>Перший Дзвінок</h2>
 
-<h2>Перший Дзвінок</h2>
+    <!-- filter for Operators -->
+    <div class="filter-container">
+        <div class="btn-group">
+            <select class="form-control" id="operatorDropdown">
+                <option value="">Оператори</option>  <!-- Default option (no filter) -->
+                {% for operator in operators %}
+                    <option value="{{ operator.username }}" {% if selected_operator == operator.username %}selected{% endif %}>
+                        {{ operator.username }}
+                    </option>
+                {% endfor %}
+            </select>
+            <span id="operatorCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
 
- <!-- filter for Operators -->
-<div class="filter-container">
-    <div class="btn-group">
-        <select class="form-control" id="operatorDropdown">
-             <option value="">Оператори</option>
-            {% for operator in operators %}
-                <option value="{{ operator.username }}">{{ operator.username }}</option>
-            {% endfor %}
-        </select>
+        <!-- filter for "Статус першого дзвінка" -->
+        <div class="btn-group">
+            <select id="status-filter" class="form-control">
+                <option value="">Статус першого дзвінка</option>  <!-- Default option (no filter) -->
+                <option value="Так, прийдуть на пробне" {% if selected_status == "Так, прийдуть на пробне" %}selected{% endif %}>Так, прийдуть на пробне</option>
+                <option value="Ні" {% if selected_status == "Ні" %}selected{% endif %}>Ні</option>
+                <option value="Думають" {% if selected_status == "Думають" %}selected{% endif %}>Думають</option>
+                <option value="Невірний номер" {% if selected_status == "Невірний номер" %}selected{% endif %}>Невірний номер</option>
+                <option value="На наступний тиждень" {% if selected_status == "На наступний тиждень" %}selected{% endif %}>На наступний тиждень</option>
+                <option value="Передзвонити пізніше" {% if selected_status == "Передзвонити пізніше" %}selected{% endif %}>Передзвонити пізніше</option>
+                <option value="Примітка" {% if selected_status == "Примітка" %}selected{% endif %}>Примітка</option>
+                <option value="Не беруть телефон" {% if selected_status == "Не беруть телефон" %}selected{% endif %}>Не беруть телефон</option>
+            </select>
+            <span id="statusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
+        <!-- Clear Filters Button -->
+        <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
     </div>
 
-<!-- filter for "Статус першого дзвінка" -->
-     <div class="btn-group">
-        <select id="status-filter" class="form-control">
-            <option value="">Статус першого дзвінка</option>
-            <option value="Так, прийдуть на пробне">Так, прийдуть на пробне</option>
-            <option value="Ні">Ні</option>
-            <option value="Думають">Думають</option>
-            <option value="Невірний номер">Невірний номер</option>
-            <option value="На наступний тиждень">На наступний тиждень</option>
-            <option value="Передзвонити пізніше">Передзвонити пізніше</option>
-            <option value="Примітка">Примітка</option>
-            <option value="Не беруть телефон">Не беруть телефон</option>
-        </select>
-    </div>
-</div>
+    <!-- Table Header -->
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">ПІБ</th>
+                <th scope="col">Номер Телефону</th>
+                <th scope="col">Номер Телефону Батьків</th>
+                <th scope="col">ПІБ Батьків</th>
+                <th scope="col">Школа</th>
+                <th scope="col">Клас</th>
+                <th scope="col">Перший дзвінок</th>
+                <th scope="col">Статус Першого Дзвінка</th>
+                <th scope="col">Запис на пробне</th>
+                <th scope="col">Статус Пробного</th>
+                <th scope="col">Коментар</th>
+                <th scope="col">Редагувати</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% if student_obj %}
+                {% for student in student_obj %}
+                <tr class="first-call-row active-row" data-operator="{{ student.first_call }}">
+                    <td>{{ student.order }}</td>
+                    <td>{{ student.student_full_name|default_if_none:"" }}</td>
+                    <td>{{ student.student_phone_number|default_if_none:"" }}</td>
+                    <td>{{ student.parent_phone_number|default_if_none:"" }}</td>
+                    <td>{{ student.parent_full_name|default_if_none:"" }}</td>
+                    <td>{{ student.school|default_if_none:"" }}</td>
+                    <td>{{ student.class_number|default_if_none:"" }}</td>
+                    <td>{{ student.first_call|default_if_none:"" }}</td>
+                    <td>{{ student.first_call_status|default_if_none:"" }}</td>
+                    <td>{{ student.trial_registration|default_if_none:"" }}</td>
+                    <td>{{ student.trial_status|default_if_none:"" }}</td>
+                    <td>{{ student.comment_first_call|default_if_none:"" }}</td>
+                    <td>
+                        <a href="{% url 'student_update' pk=student.pk %}">
+                            <button type="button" class="btn btn-link">Змінити</button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="13" style="text-align: center;">Немає учнів для дзвінка :(</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
 
-
-<table class="styled-table">
-  <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">ПІБ</th>
-        <th scope="col">Номер Телефону</th>
-        <th scope="col">Номер Телефону Батьків</th>
-        <th scope="col">ПІБ Батьків</th>
-        <th scope="col">Школа</th>
-        <th scope="col">Клас</th>
-<!--        <th scope="col">Дата додавання</th>-->
-        <th scope="col">Перший дзвінок</th>
-        <th scope="col">Статус Першого Дзвінка</th>
-        <th scope="col">Запис на пробне</th>
-        <th scope="col">Статус Пробного</th>
-        <th scope="col">Коментар</th>
-        <th scope="col">Редагувати</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-      {% if center_obj %}
-        {% for student in student_obj %}
-        <tr class="first-call-row active-row" data-operator="{{ student.first_call }}">
-            <td>{{ student.order }}</td>
-            <td>{{ student.student_full_name |default_if_none:""}}</td>
-            <td>{{ student.student_phone_number |default_if_none:""}}</td>
-            <td>{{ student.parent_phone_number |default_if_none:""}}</td>
-            <td>{{ student.parent_full_name |default_if_none:""}}</td>
-            <td>{{ student.school|default_if_none:""}}</td>
-            <td>{{ student.class_number|default_if_none:""}}</td>
-<!--            <td>{{ student.student_add_date|default_if_none:""}}</td>-->
-            <td>{{ student.first_call|default_if_none:""}}</td>
-            <td>{{ student.first_call_satus|default_if_none:""}}</td>
-            <td>{{ student.trial_registration|default_if_none:""}}</td>
-            <td>{{ student.trial_status|default_if_none:""}}</td>
-            <td>{{ student.comment_first_call|default_if_none:""}}</td>
-            <td>
-            <a href="{% url 'student_update' pk=student.pk %}">
-            <button type="button" class="btn btn-link">Змінити</button></a>
-          </td>
-        </tr>
+    <!-- Pagination -->
+    <div class="pagination">
+    {% if student_obj.has_previous %}
+        <a href="?page={{ student_obj.previous_page_number }}{% if selected_operator %}&operator={{ selected_operator }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="prev">Назад</a>
+    {% endif %}
+    <div class="page-numbers">
+        {% for i in student_obj.paginator.page_range %}
+            {% if student_obj.number == i %}
+                <span class="current">{{ i }}</span>
+            {% else %}
+                <a href="?page={{ i }}{% if selected_operator %}&operator={{ selected_operator }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}">{{ i }}</a>
+            {% endif %}
         {% endfor %}
-      {% endif %}
-    </tbody>
-  </table>
-    <div class="pagination" >
-        {% if student_obj.has_previous %}
-            <a href="?page={{ student_obj.previous_page_number }}" class="prev">Назад</a>
-                {% endif %}
-                <div class="page-numbers">
-                    <!-- Page numbers -->
-                    {% for i in student_obj.paginator.page_range %}
-                        {% if student_obj.number == i %}
-                            <span class="current">{{ i }}</span>
-                        {% else %}
-                            <a href="?page={{ i }}">{{ i }}</a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                {% if student_obj.has_next %}
-            <a href="?page={{ student_obj.next_page_number }}" class="next">Вперед</a>
-        {% endif %}
     </div>
-
+    {% if student_obj.has_next %}
+        <a href="?page={{ student_obj.next_page_number }}{% if selected_operator %}&operator={{ selected_operator }}{% endif %}{% if selected_status %}&status={{ selected_status }}{% endif %}" class="next">Вперед</a>
+    {% endif %}
+    </div>
 </div>
+
 {% else %}
-
     <h2>Немає учнів для дзвінка :(</h2>
-
 {% endif %}
+
 <script>
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
-    var rows = document.querySelectorAll('.first-call-row');
+    var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
+    var operatorCount = document.querySelector('#operatorCount');
+    var statusCount = document.querySelector('#statusCount');
 
-    operatorDropdown.addEventListener('change', filterRows);
-    statusFilter.addEventListener('change', filterRows);
+    operatorDropdown.addEventListener('change', updateFilters);
+    statusFilter.addEventListener('change', updateFilters);
+    clearFiltersBtn.addEventListener('click', clearFilters);
 
-    function filterRows() {
-        var operatorUsername = operatorDropdown.value.trim().toLowerCase();
+    function updateFilters() {
+        var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
 
-        rows.forEach(function(row) {
-            var rowOperator = row.dataset.operator.trim().toLowerCase();
-            var statusCell = row.querySelector('td:nth-child(9)').textContent.trim(); // Adjust the index to 9
+        // Build the new URL with query parameters
+        var url = new URL(window.location.href);
+        url.searchParams.set('operator', operatorUsername);
+        url.searchParams.set('status', selectedStatus);
+        url.searchParams.set('page', 1); // Always go to the first page
 
-            if ((operatorUsername === "" || rowOperator === operatorUsername) &&
-                (selectedStatus === "" || statusCell === selectedStatus)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
+        // Redirect to the updated URL
+        window.location.href = url.toString();
+    }
+
+    function clearFilters() {
+        // Clear the selections
+        operatorDropdown.selectedIndex = 0; // Reset operator dropdown
+        statusFilter.selectedIndex = 0; // Reset status dropdown
+        operatorCount.style.display = 'none'; // Hide operator count
+        statusCount.style.display = 'none'; // Hide status count
+
+        // Redirect to the page without any filters
+        var url = new URL(window.location.href);
+        url.searchParams.delete('operator'); // Remove operator from URL
+        url.searchParams.delete('status'); // Remove status from URL
+        url.searchParams.set('page', 1); // Always go to the first page
+
+        window.location.href = url.toString();
+    }
+
+    // On page load, show counts based on current filters
+    updateCounts();
+
+    function updateCounts() {
+        var operatorUsername = operatorDropdown.value.trim();
+        var selectedStatus = statusFilter.value.trim();
+
+        // Show counts only if filters are applied
+        if (operatorUsername) {
+            operatorCount.textContent = '{{ total_count }}'; // Use total_count from context
+            operatorCount.style.display = 'inline'; // Show count
+        } else {
+            operatorCount.style.display = 'none'; // Hide count if no operator is selected
+        }
+
+        if (selectedStatus) {
+            statusCount.textContent = '{{ total_count }}'; // Use total_count from context
+            statusCount.style.display = 'inline'; // Show count
+        } else {
+            statusCount.style.display = 'none'; // Hide count if no status is selected
+        }
     }
 };
 </script>
-{% endif %}
 {% endblock content %}

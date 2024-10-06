@@ -215,3 +215,36 @@ select option:first-child {
     display: flex;
     justify-content: center;
 }
+.filter-container {
+    margin-bottom: 15px; /* Spacing below the filter container */
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Align items vertically */
+}
+
+.filter-count {
+    margin-left: 10px; /* Space between the dropdown and count */
+    font-weight: bold;  /* Make count text bold */
+    color: #2e073f;     /* color of the nav for the counts */
+    font-size: 14px;    /* Adjust font size */
+    width: auto;        /* Auto width for dynamic content */
+    display: none;      /* Initially hidden */
+    height: 100%;       /* Full height to align with dropdown */
+    line-height: normal; /* Set line-height to normal for better centering */
+    align-items: center; /* Center vertically */
+    margin-top: 10px;
+}
+
+.clear-filters {
+    margin-left: 10px;  /* Space between the dropdown and button */
+    font-weight: bold;   /* Make button text bold */
+    background-color: #dc3545; /* Red color for the clear button */
+    color: white;        /* White text color */
+    border: none;       /* Remove default border */
+    padding: 5px 10px;  /* Padding around the button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;     /* Change cursor on hover */
+}
+
+.clear-filters:hover {
+    background-color: #c82333; /* Darker red on hover */
+}

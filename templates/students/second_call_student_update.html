@@ -70,12 +70,12 @@
         </p>
     </div>
 
-    <!-- first_call_satus -->
+    <!-- first_call_status -->
     <div class="form-group">
         <p>
-        <label for="first_call_satus">Статус першого дзвінка:</label>
-        <input type="text" id="first_call_satus" class="form-control" value=" {{ student_obj.first_call_satus|default_if_none:''}}" readonly>
-        <input type="hidden" name="first_call_satus" value="{{ student_obj.first_call_satus |default_if_none:'' }}">
+        <label for="first_call_status">Статус першого дзвінка:</label>
+        <input type="text" id="first_call_status" class="form-control" value=" {{ student_obj.first_call_status|default_if_none:''}}" readonly>
+        <input type="hidden" name="first_call_status" value="{{ student_obj.first_call_status |default_if_none:'' }}">
         </p>
     </div>
 
@@ -122,7 +122,7 @@
         </p>
 
         <label>Статус другого дзвінка:</label>
-        <p>{{ form.second_call_satus }}</p>
+        <p>{{ form.second_call_status }}</p>
 
         <div class="form-group">
             <label for="add_to_group">Група постійне:</label>

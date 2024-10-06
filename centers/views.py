@@ -290,14 +290,19 @@ def first_call_view(request, pk):
     try:
         center_obj = get_object_or_404(Center, pk=pk)
         operators = CustomUser.objects.filter(role='operator')
+
+        selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
-        # students = Student.objects.filter(center=center_obj)
         student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         if selected_operator:
             student_obj = student_obj.filter(first_call=selected_operator)
+        if selected_status:
+            student_obj = student_obj.filter(first_call_status=selected_status)
+
+        total_count = student_obj.count()
 
         # Add pagination
-        paginator = Paginator(student_obj, 50)  # Show 50 students per page
+        paginator = Paginator(student_obj, 10)  # Show 50 students per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:
@@ -315,7 +320,10 @@ def first_call_view(request, pk):
         'student_obj': page_obj,
         'center_obj': center_obj,
         'operators': operators,
+        'selected_operator': selected_operator,
+        'selected_status': selected_status,
         'breadcrumbs': breadcrumbs,
+        'total_count': total_count,
     }
     return render(request, 'students/first_call.html', context)
 
@@ -330,12 +338,12 @@ def second_call_view(request, pk):
         if selected_operator:
             student_obj = student_obj.filter(
                 second_call=selected_operator,
-                first_call_satus='Так, прийдуть на пробне'
+                first_call_status='Так, прийдуть на пробне'
             ).order_by('student_add_date')
         else:
             student_obj = Student.objects.filter(
                 center=center_obj).filter(
-                first_call_satus='Так, прийдуть на пробне').order_by('student_add_date')
+                first_call_status='Так, прийдуть на пробне').order_by('student_add_date')
 
         paginator = Paginator(student_obj, 50)  # Show 50 students per page
         page_number = request.GET.get('page')
@@ -354,6 +362,7 @@ def second_call_view(request, pk):
         'center_obj': center_obj,
         'student_obj': page_obj,
         'operators': operators,
+
         'breadcrumbs': breadcrumbs,
     }
     return render(request, 'students/second_call.html', context)
