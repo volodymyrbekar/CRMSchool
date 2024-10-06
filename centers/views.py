@@ -297,7 +297,7 @@ def first_call_view(request, pk):
             student_obj = student_obj.filter(first_call=selected_operator)
 
         # Add pagination
-        paginator = Paginator(student_obj, 50)  # Show 10 students per page
+        paginator = Paginator(student_obj, 50)  # Show 50 students per page
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
     except Center.DoesNotExist:

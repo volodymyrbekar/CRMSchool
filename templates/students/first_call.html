@@ -98,11 +98,11 @@
                 <div class="page-numbers">
                     <!-- Page numbers -->
                     {% for i in student_obj.paginator.page_range %}
-                    {% if student_obj.number == i %}
-                    <span class="current">{{ i }}</span>
-                    {% else %}
-                    <a href="?page={{ i }}">{{ i }}</a>
-                    {% endif %}
+                        {% if student_obj.number == i %}
+                            <span class="current">{{ i }}</span>
+                        {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 {% if student_obj.has_next %}
