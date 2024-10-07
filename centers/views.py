@@ -293,15 +293,19 @@ def first_call_view(request, pk):
 
         selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
+        selected_trial_registration = request.GET.get('trial_registration')
 
         group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
 
         student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         all_students = student_obj.count()
+
         if selected_operator:
             student_obj = student_obj.filter(first_call=selected_operator)
         if selected_status:
             student_obj = student_obj.filter(first_call_status=selected_status)
+        if selected_trial_registration:
+            student_obj = student_obj.filter(trial_registration=selected_trial_registration)
 
         total_count = student_obj.count()
 
@@ -326,6 +330,7 @@ def first_call_view(request, pk):
         'operators': operators,
         'selected_operator': selected_operator,
         'selected_status': selected_status,
+        'selected_trial_registration': selected_trial_registration,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
         'all_students': all_students,
@@ -342,6 +347,7 @@ def second_call_view(request, pk):
 
         selected_operator = request.GET.get('operator')
         selected_status = request.GET.get('status')
+        selected_add_to_group = request.GET.get('add_to_group')
 
         group_obj = GroupPermanent.objects.filter(center_id=pk).all()
 
@@ -355,6 +361,10 @@ def second_call_view(request, pk):
         # Apply status filter if selected
         if selected_status:
             student_obj = student_obj.filter(second_call_status=selected_status)
+
+        # Apply add_to_group filter if selected
+        if selected_add_to_group:
+            student_obj = student_obj.filter(add_to_group=selected_add_to_group)
 
         total_count = student_obj.count()
 
@@ -377,6 +387,7 @@ def second_call_view(request, pk):
         'operators': operators,
         'selected_operator': selected_operator,
         'selected_status': selected_status,
+        'selected_add_to_group': selected_add_to_group,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
         'all_students': all_students,

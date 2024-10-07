@@ -45,6 +45,19 @@
             </select>
             <span id="statusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
+
+        <div class="btn-group">
+            <select id="trial-registration-filter" class="form-control">
+                <option value="">Групи пробне</option>
+                {% for group in group_trial_obj %}
+                    <option value="{{ group.id }}" {% if selected_trial_registration|stringformat:"s" == group.id|stringformat:"s" %}selected{% endif %}>
+                    {{ group.group_name }}
+                </option>
+                {% endfor %}
+            </select>
+            <span id="trialRegistrationCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+         </div>
+
         <!-- Clear Filters Button -->
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
         <span class="bold-text">Всі учні - {{ all_students }}</span>
@@ -142,22 +155,27 @@
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
+    var trialRegistrationFilter = document.querySelector('#trial-registration-filter');
     var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
     var operatorCount = document.querySelector('#operatorCount');
     var statusCount = document.querySelector('#statusCount');
+    var trialRegistrationCount = document.querySelector('#trialRegistrationCount');
 
     operatorDropdown.addEventListener('change', updateFilters);
     statusFilter.addEventListener('change', updateFilters);
+    trialRegistrationFilter.addEventListener('change', updateFilters);
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     function updateFilters() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
+        var selectedTrialRegistration = trialRegistrationFilter.value.trim();
 
         // Build the new URL with query parameters
         var url = new URL(window.location.href);
         url.searchParams.set('operator', operatorUsername);
         url.searchParams.set('status', selectedStatus);
+        url.searchParams.set('trial_registration', selectedTrialRegistration);
         url.searchParams.set('page', 1); // Always go to the first page
 
         // Redirect to the updated URL
@@ -166,16 +184,18 @@ window.onload = function() {
 
     function clearFilters() {
         // Clear the selections
-        operatorDropdown.selectedIndex = 0; // Reset operator dropdown
-        statusFilter.selectedIndex = 0; // Reset status dropdown
-        operatorCount.style.display = 'none'; // Hide operator count
-        statusCount.style.display = 'none'; // Hide status count
+        operatorDropdown.selectedIndex = 0;
+        statusFilter.selectedIndex = 0;
+        trialRegistrationFilter.selectedIndex = 0;
+        operatorCount.style.display = 'none';
+        statusCount.style.display = 'none';
+        trialRegistrationCount.style.display = 'none';
 
-        // Redirect to the page without any filters
         var url = new URL(window.location.href);
-        url.searchParams.delete('operator'); // Remove operator from URL
-        url.searchParams.delete('status'); // Remove status from URL
-        url.searchParams.set('page', 1); // Always go to the first page
+        url.searchParams.delete('operator');
+        url.searchParams.delete('status');
+        url.searchParams.delete('trial_registration');
+        url.searchParams.set('page', 1);
 
         window.location.href = url.toString();
     }
@@ -186,20 +206,27 @@ window.onload = function() {
     function updateCounts() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
+        var selectedTrialRegistration = trialRegistrationFilter.value.trim();
 
-        // Show counts only if filters are applied
         if (operatorUsername) {
-            operatorCount.textContent = '{{ total_count }}'; // Use total_count from context
-            operatorCount.style.display = 'inline'; // Show count
+            operatorCount.textContent = '{{ total_count }}';
+            operatorCount.style.display = 'inline';
         } else {
-            operatorCount.style.display = 'none'; // Hide count if no operator is selected
+            operatorCount.style.display = 'none';
         }
 
         if (selectedStatus) {
-            statusCount.textContent = '{{ total_count }}'; // Use total_count from context
-            statusCount.style.display = 'inline'; // Show count
+            statusCount.textContent = '{{ total_count }}';
+            statusCount.style.display = 'inline';
         } else {
-            statusCount.style.display = 'none'; // Hide count if no status is selected
+            statusCount.style.display = 'none';
+        }
+
+        if (selectedTrialRegistration) {
+            trialRegistrationCount.textContent = '{{ total_count }}';
+            trialRegistrationCount.style.display = 'inline';
+        } else {
+            trialRegistrationCount.style.display = 'none';
         }
     }
 };

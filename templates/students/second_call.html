@@ -45,12 +45,25 @@
             <span id="statusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
 
+        <!-- filter Групи додати -->
+        <div class="btn-group">
+            <select id="add-to-group-filter" class="form-control">
+                <option value="">Групи постйне</option>
+                {% for group in group_obj %}
+                <option value="{{ group.id }}" {% if selected_add_to_group == group.id|stringformat:"s" %}selected{% endif %}>
+                    {{ group.group_name }}
+                </option>
+                {% endfor %}
+            </select>
+            <span id="addToGroupCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
+
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
         <span class="bold-text">Всі учні - {{ all_students }}</span>
 
 
      <!-- Дропдаун груп на постійне -->
-        <div class="btn-group">
+        <div class="btn-group right-aligned-button">
             <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
                 Групи - постійне
@@ -151,22 +164,27 @@
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
+    var addToGroupFilter = document.querySelector('#add-to-group-filter');
     var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
     var operatorCount = document.querySelector('#operatorCount');
     var statusCount = document.querySelector('#statusCount');
+    var addToGroupCount = document.querySelector('#addToGroupCount');
 
     operatorDropdown.addEventListener('change', updateFilters);
     statusFilter.addEventListener('change', updateFilters);
+    addToGroupFilter.addEventListener('change', updateFilters);
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     function updateFilters() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
+        var selectedAddToGroup = addToGroupFilter.value.trim();
 
         // Build the new URL with query parameters
         var url = new URL(window.location.href);
         url.searchParams.set('operator', operatorUsername);
         url.searchParams.set('status', selectedStatus);
+        url.searchParams.set('add_to_group', selectedAddToGroup);
         url.searchParams.set('page', 1); // Always go to the first page
 
         // Redirect to the updated URL
@@ -177,12 +195,15 @@ window.onload = function() {
         // Clear the selections
         operatorDropdown.selectedIndex = 0;
         statusFilter.selectedIndex = 0;
+        addToGroupFilter.selectedIndex = 0;
         operatorCount.style.display = 'none';
         statusCount.style.display = 'none';
+        addToGroupCount.style.display = 'none';
 
         var url = new URL(window.location.href);
         url.searchParams.delete('operator');
         url.searchParams.delete('status');
+        url.searchParams.delete('add_to_group');
         url.searchParams.set('page', 1);
 
         window.location.href = url.toString();
@@ -194,6 +215,7 @@ window.onload = function() {
     function updateCounts() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
+        var selectedAddToGroup = addToGroupFilter.value.trim();
 
         if (operatorUsername) {
             operatorCount.textContent = '{{ total_count }}';
@@ -207,6 +229,13 @@ window.onload = function() {
             statusCount.style.display = 'inline';
         } else {
             statusCount.style.display = 'none';
+        }
+
+        if (selectedAddToGroup) {
+            addToGroupCount.textContent = '{{ total_count }}';
+            addToGroupCount.style.display = 'inline';
+        } else {
+            addToGroupCount.style.display = 'none';
         }
     }
 };
