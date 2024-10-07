@@ -293,6 +293,9 @@ def first_call_view(request, pk):
 
         selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
+
+        group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
+
         student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
         all_students = student_obj.count()
         if selected_operator:
@@ -325,7 +328,8 @@ def first_call_view(request, pk):
         'selected_status': selected_status,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
-        'all_students': all_students
+        'all_students': all_students,
+        'group_trial_obj': group_trial_obj,
     }
     return render(request, 'students/first_call.html', context)
 
@@ -338,6 +342,8 @@ def second_call_view(request, pk):
 
         selected_operator = request.GET.get('operator')
         selected_status = request.GET.get('status')
+
+        group_obj = GroupPermanent.objects.filter(center_id=pk).all()
 
         student_obj = Student.objects.filter(center=center_obj, first_call_status='Так, прийдуть на пробне').order_by('student_add_date')
         all_students = student_obj.count()
@@ -373,7 +379,8 @@ def second_call_view(request, pk):
         'selected_status': selected_status,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
-        'all_students': all_students
+        'all_students': all_students,
+        'group_obj': group_obj,
     }
     return render(request, 'students/second_call.html', context)
 

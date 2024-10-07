@@ -44,10 +44,24 @@
             </select>
             <span id="statusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
+
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
         <span class="bold-text">Всі учні - {{ all_students }}</span>
-    </div>
 
+
+     <!-- Дропдаун груп на постійне -->
+        <div class="btn-group">
+            <button style="margin:5px;" type="button" class="btn btn-outline-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                Групи - постійне
+            </button>
+            <ul class="dropdown-menu">
+                {% for group in group_obj %}
+                <li><a class="dropdown-item" href="{% url 'group_detail' group.id %}">{{ group.group_name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
 <table class="styled-table">
   <thead>

@@ -251,3 +251,8 @@ select option:first-child {
     color: #2e073f;
     font-size: 13px;
 }
+
+.dropdown-right {
+    margin-left: auto; /* Push the dropdown to the right */
+
+}
