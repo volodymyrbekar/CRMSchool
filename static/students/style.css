@@ -34,14 +34,11 @@ h2 {
 
 
 
-
-.container {
-  width: 100%;
-}
-
 .second-call-page {
-  width: 100%;
-  position: absolute;
+    margin-left: -80px; /* Add 50px margin from the left border */
+    width: calc(100% - 50px); /* Adjust width to account for the margin */
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    position: relative; /* Ensure the element is positioned correctly */
 }
 
 .breadcrumb-link {
