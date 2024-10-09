@@ -28,6 +28,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'centers_list' %}">Центри</a>
         </li>
+        <li class="nav-item">
+          <input type="text" id="searchInput" class="form-control custom-search-input" placeholder="Пошук..." aria-label="Search Students">
+        </li>
 
         {% else %}
         <li class="nav-item">
@@ -39,3 +42,88 @@
     </div>
   </div>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.querySelector('#searchInput');
+
+        // Debounce function to limit the rate of calls to searchStudents
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Event listener for input changes in the search field
+        searchInput.addEventListener('input', debounce(searchStudents, 300));
+
+        function searchStudents() {
+            var query = searchInput.value.trim().toLowerCase();
+
+            // If the query is empty, clear the search results and return
+            if (query === "") {
+                clearSearchResults();
+                return;
+            }
+
+            // Select all student rows in the table
+            var rows = document.querySelectorAll('.styled-table tbody tr');
+            var matchedCount = 0;
+
+            // Loop through each row and check if it contains the search query
+            rows.forEach(row => {
+                // Get the text content of the row
+                var rowText = row.textContent.toLowerCase();
+
+                if (rowText.includes(query)) {
+                    // Show row if it matches the query
+                    row.style.display = '';
+                    matchedCount++;
+
+                    // Highlight matching query in the row
+                    highlightQuery(row, query);
+                } else {
+                    // Hide row if it doesn't match
+                    row.style.display = 'none';
+                }
+            });
+
+            // Update the total matched count
+            updateMatchedCount(matchedCount);
+        }
+
+        function clearSearchResults() {
+            // Show all rows when the search query is cleared
+            var rows = document.querySelectorAll('.styled-table tbody tr');
+            rows.forEach(row => {
+                row.style.display = ''; // Show all rows
+            });
+
+            // Reset matched count display
+            updateMatchedCount(0);
+        }
+
+        function highlightQuery(row, query) {
+            // Remove previous highlights
+            var tds = row.querySelectorAll('td');
+            tds.forEach(td => {
+                td.innerHTML = td.textContent; // Reset to original text
+            });
+
+            // Create a regex for highlighting
+            var regex = new RegExp(`(${query})`, 'gi');
+
+            // Highlight matches in each cell
+            tds.forEach(td => {
+                td.innerHTML = td.textContent.replace(regex, '<span class="highlight">$1</span>');
+            });
+        }
+
+        function updateMatchedCount(count) {
+            var totalMatchedCount = document.querySelector('#totalMatchedCount');
+            totalMatchedCount.textContent = count + (count === 1 ? ' match' : ' matches');
+        }
+    });
+</script>
+

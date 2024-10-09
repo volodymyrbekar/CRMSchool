@@ -51,7 +51,7 @@ def student_list_view(request, pk):
         center_obj = Center.objects.get(pk=pk)
     except Center.DoesNotExist:
         raise Http404("Center does not exist")
-    student_obj = Student.objects.filter(center_id=pk).order_by('student_add_date').all()
+    student_obj = Student.objects.filter(center_id=pk).order_by('-student_add_date').all()
 
     paginator = Paginator(student_obj, 50)  # Show 10 students per page
     page_number = request.GET.get('page')
@@ -297,7 +297,7 @@ def first_call_view(request, pk):
 
         group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
 
-        student_obj = Student.objects.filter(center=center_obj).order_by('student_add_date')
+        student_obj = Student.objects.filter(center=center_obj).order_by('-student_add_date')
         all_students = student_obj.count()
 
         if selected_operator:

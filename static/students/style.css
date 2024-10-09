@@ -260,3 +260,12 @@ select option:first-child {
    margin-left: auto;
    margin-right: -170px;
 }
+
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.custom-search-input {
+    margin-left: 20px;
+}
