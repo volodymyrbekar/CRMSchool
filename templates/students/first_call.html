@@ -57,6 +57,16 @@
             </select>
             <span id="trialRegistrationCount" class="filter-count" style="display: none;">{{ total_count }}</span>
          </div>
+        <!-- Filter Статус пробного -->
+        <div class="btn-group">
+            <select id="trial-status-filter" class="form-control">
+                <option value="">Статус пробного</option>  <!-- Default option (no filter) -->
+                {% for value, display in trial_status_choices %}
+                    <option value="{{ value }}" {% if selected_trial_status == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+            <span id="trialStatusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
 
         <!-- Clear Filters Button -->
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
@@ -156,26 +166,31 @@ window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
     var trialRegistrationFilter = document.querySelector('#trial-registration-filter');
+    var trialStatusFilter = document.querySelector('#trial-status-filter');  // New filter
     var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
     var operatorCount = document.querySelector('#operatorCount');
     var statusCount = document.querySelector('#statusCount');
     var trialRegistrationCount = document.querySelector('#trialRegistrationCount');
+    var trialStatusCount = document.querySelector('#trialStatusCount');  // New count
 
     operatorDropdown.addEventListener('change', updateFilters);
     statusFilter.addEventListener('change', updateFilters);
     trialRegistrationFilter.addEventListener('change', updateFilters);
+    trialStatusFilter.addEventListener('change', updateFilters);  // New event listener
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     function updateFilters() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
         var selectedTrialRegistration = trialRegistrationFilter.value.trim();
+        var selectedTrialStatus = trialStatusFilter.value.trim();  // New filter value
 
         // Build the new URL with query parameters
         var url = new URL(window.location.href);
         url.searchParams.set('operator', operatorUsername);
         url.searchParams.set('status', selectedStatus);
         url.searchParams.set('trial_registration', selectedTrialRegistration);
+        url.searchParams.set('trial_status', selectedTrialStatus);  // Add new filter to URL
         url.searchParams.set('page', 1); // Always go to the first page
 
         // Redirect to the updated URL
@@ -187,14 +202,17 @@ window.onload = function() {
         operatorDropdown.selectedIndex = 0;
         statusFilter.selectedIndex = 0;
         trialRegistrationFilter.selectedIndex = 0;
+        trialStatusFilter.selectedIndex = 0;  // Clear new filter
         operatorCount.style.display = 'none';
         statusCount.style.display = 'none';
         trialRegistrationCount.style.display = 'none';
+        trialStatusCount.style.display = 'none';  // Hide new count
 
         var url = new URL(window.location.href);
         url.searchParams.delete('operator');
         url.searchParams.delete('status');
         url.searchParams.delete('trial_registration');
+        url.searchParams.delete('trial_status');  // Delete new filter
         url.searchParams.set('page', 1);
 
         window.location.href = url.toString();
@@ -207,6 +225,7 @@ window.onload = function() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
         var selectedTrialRegistration = trialRegistrationFilter.value.trim();
+        var selectedTrialStatus = trialStatusFilter.value.trim();  // New filter value
 
         if (operatorUsername) {
             operatorCount.textContent = '{{ total_count }}';
@@ -227,6 +246,13 @@ window.onload = function() {
             trialRegistrationCount.style.display = 'inline';
         } else {
             trialRegistrationCount.style.display = 'none';
+        }
+
+        if (selectedTrialStatus) {  // Show new count
+            trialStatusCount.textContent = '{{ total_count }}';
+            trialStatusCount.style.display = 'inline';
+        } else {
+            trialStatusCount.style.display = 'none';
         }
     }
 };

@@ -9,6 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentFirstForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, GroupPermanent
+from .choices import CHOICES_TRIAL_STATUS
 from users.models import CustomUser
 
 
@@ -294,6 +295,7 @@ def first_call_view(request, pk):
         selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
         selected_trial_registration = request.GET.get('trial_registration')
+        selected_trial_status = request.GET.get('trial_status')
 
         group_trial_obj = GroupTrial.objects.filter(center_id=pk).all()
 
@@ -306,6 +308,8 @@ def first_call_view(request, pk):
             student_obj = student_obj.filter(first_call_status=selected_status)
         if selected_trial_registration:
             student_obj = student_obj.filter(trial_registration=selected_trial_registration)
+        if selected_trial_status:
+            student_obj = student_obj.filter(trial_status=selected_trial_status)
 
         total_count = student_obj.count()
 
@@ -331,6 +335,8 @@ def first_call_view(request, pk):
         'selected_operator': selected_operator,
         'selected_status': selected_status,
         'selected_trial_registration': selected_trial_registration,
+        'selected_trial_status': selected_trial_status,
+        'trial_status_choices': CHOICES_TRIAL_STATUS,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
         'all_students': all_students,
