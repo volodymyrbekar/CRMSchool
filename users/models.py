@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from centers.models import Center
 
 
 class CustomUser(AbstractUser):
@@ -15,11 +16,17 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=50, blank=True, null=True)
     last_name = models.CharField(max_length=50, blank=True, null=True)
     username = models.CharField(max_length=150, unique=True)
+    centers = models.ManyToManyField(Center, blank=True)
 
     groups = models.ManyToManyField(Group, blank=True)
     user_permissions = models.ManyToManyField(Permission, blank=True)
 
+    def has_access_to_center(self, center):
+        return self.centers.filter(pk=center.pk).exists()
+
     def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.role = self.ROLE_ADMIN
         super(CustomUser, self).save(*args, **kwargs)
         is_new = self.pk is None  # check if the user is new
         # if is_new:

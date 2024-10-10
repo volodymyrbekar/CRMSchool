@@ -15,7 +15,8 @@ from users.models import CustomUser
 
 @login_required
 def centers_list_view(request):
-    centers_obj = Center.objects.all()
+    user = request.user
+    centers_obj = Center.objects.filter(customuser=user)
     context = {
         'title': 'Центри',
         'centers': centers_obj,

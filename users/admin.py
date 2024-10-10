@@ -3,13 +3,15 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from .models import CustomUser
 from django.contrib.auth.models import Permission
-from .forms import CustomUserCreationForm
+from .forms import CustomUserChangeForm
 
 
 class CustomUserAdmin(UserAdmin):
+    form = CustomUserChangeForm
+    model = CustomUser
     list_display = ['username', 'role', 'first_name']
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('username', 'password', 'centers')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'role')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),

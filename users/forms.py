@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.auth.forms import UserChangeForm
+from centers.models import Center
 from .models import CustomUser
+from .widgets import CenterSelectWidget
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -21,3 +23,15 @@ class CustomUserCreationForm(UserCreationForm):
             print("Validation errors:", self.errors)
         return cleaned_data
 
+
+class CustomUserChangeForm(UserChangeForm):
+    centers = forms.ModelMultipleChoiceField(
+        queryset=Center.objects.all(),
+        required=False,
+        widget=CenterSelectWidget('Centers', is_stacked=False),
+        label=''
+    )
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
