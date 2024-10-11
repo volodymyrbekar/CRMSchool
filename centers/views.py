@@ -9,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 
 from .forms import CreateCenterForm, CreateStudentForm, CreateGroupTrialForm, CreateGroupForm, UpdateStudentFirstForm, UpdateStudentSecondForm
 from .models import Center, Student, GroupTrial, GroupPermanent
-from .choices import CHOICES_TRIAL_STATUS
+from .choices import CHOICES_TRIAL_STATUS, CHOICES_FIRST_CALL_STATUS
 from users.models import CustomUser
 
 
@@ -356,6 +356,7 @@ def second_call_view(request, pk):
         selected_status = request.GET.get('status')
         selected_add_to_group = request.GET.get('add_to_group')
         selected_trial_status = request.GET.get('trial_status')
+        selected_first_call_status = request.GET.get('first_call_status')
 
         group_obj = GroupPermanent.objects.filter(center_id=pk).all()
 
@@ -375,7 +376,10 @@ def second_call_view(request, pk):
             student_obj = student_obj.filter(add_to_group=selected_add_to_group)
 
         if selected_trial_status:
-            student_obj = student_obj.filter(trial_status=selected_trial_status)  # Add this line
+            student_obj = student_obj.filter(trial_status=selected_trial_status)
+
+        if selected_first_call_status:
+            student_obj = student_obj.filter(first_call_status=selected_first_call_status)
 
         total_count = student_obj.count()
 
@@ -400,11 +404,13 @@ def second_call_view(request, pk):
         'selected_status': selected_status,
         'selected_add_to_group': selected_add_to_group,
         'selected_trial_status': selected_trial_status,
+        'selected_first_call_status': selected_first_call_status,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
         'all_students': all_students,
         'group_obj': group_obj,
         'trial_status_choices': CHOICES_TRIAL_STATUS,
+        'first_call_status_choices': CHOICES_FIRST_CALL_STATUS,
     }
     return render(request, 'students/second_call.html', context)
 

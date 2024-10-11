@@ -45,6 +45,17 @@
             <span id="statusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
 
+         <!-- filter first call status -->
+        <div class="btn-group">
+            <select id="first-call-status-filter" class="form-control">
+                <option value="">Статус першого дзвінка</option>
+                {% for value, display in first_call_status_choices %}
+                <option value="{{ value }}" {% if selected_first_call_status == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+            <span id="firstCallStatusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
+
         <!-- filter Групи додати -->
         <div class="btn-group">
             <select id="add-to-group-filter" class="form-control">
@@ -58,6 +69,7 @@
             <span id="addToGroupCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
 
+            <!-- filter trial status -->
         <div class="btn-group">
             <select id="trial-status-filter" class="form-control">
                 <option value="">Статус пробного</option>
@@ -174,27 +186,32 @@
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
-    var trialStatusFilter = document.querySelector('#trial-status-filter');  // Update this line
+    var trialStatusFilter = document.querySelector('#trial-status-filter');
+    var firstCallStatusFilter = document.querySelector('#first-call-status-filter');  // Add this line
     var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
     var operatorCount = document.querySelector('#operatorCount');
     var statusCount = document.querySelector('#statusCount');
-    var trialStatusCount = document.querySelector('#trialStatusCount');  // Update this line
+    var trialStatusCount = document.querySelector('#trialStatusCount');
+    var firstCallStatusCount = document.querySelector('#firstCallStatusCount');  // Add this line
 
     operatorDropdown.addEventListener('change', updateFilters);
     statusFilter.addEventListener('change', updateFilters);
-    trialStatusFilter.addEventListener('change', updateFilters);  // Update this line
+    trialStatusFilter.addEventListener('change', updateFilters);
+    firstCallStatusFilter.addEventListener('change', updateFilters);  // Add this line
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     function updateFilters() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
-        var selectedTrialStatus = trialStatusFilter.value.trim();  // Update this line
+        var selectedTrialStatus = trialStatusFilter.value.trim();
+        var selectedFirstCallStatus = firstCallStatusFilter.value.trim();  // Add this line
 
         // Build the new URL with query parameters
         var url = new URL(window.location.href);
         url.searchParams.set('operator', operatorUsername);
         url.searchParams.set('status', selectedStatus);
-        url.searchParams.set('trial_status', selectedTrialStatus);  // Update this line
+        url.searchParams.set('trial_status', selectedTrialStatus);
+        url.searchParams.set('first_call_status', selectedFirstCallStatus);  // Add this line
         url.searchParams.set('page', 1); // Always go to the first page
 
         // Redirect to the updated URL
@@ -205,15 +222,18 @@ window.onload = function() {
         // Clear the selections
         operatorDropdown.selectedIndex = 0;
         statusFilter.selectedIndex = 0;
-        trialStatusFilter.selectedIndex = 0;  // Update this line
+        trialStatusFilter.selectedIndex = 0;
+        firstCallStatusFilter.selectedIndex = 0;  // Add this line
         operatorCount.style.display = 'none';
         statusCount.style.display = 'none';
-        trialStatusCount.style.display = 'none';  // Update this line
+        trialStatusCount.style.display = 'none';
+        firstCallStatusCount.style.display = 'none';  // Add this line
 
         var url = new URL(window.location.href);
         url.searchParams.delete('operator');
         url.searchParams.delete('status');
-        url.searchParams.delete('trial_status');  // Update this line
+        url.searchParams.delete('trial_status');
+        url.searchParams.delete('first_call_status');  // Add this line
         url.searchParams.set('page', 1);
 
         window.location.href = url.toString();
@@ -225,7 +245,8 @@ window.onload = function() {
     function updateCounts() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
-        var selectedTrialStatus = trialStatusFilter.value.trim();  // Update this line
+        var selectedTrialStatus = trialStatusFilter.value.trim();
+        var selectedFirstCallStatus = firstCallStatusFilter.value.trim();  // Add this line
 
         if (operatorUsername) {
             operatorCount.textContent = '{{ total_count }}';
@@ -241,11 +262,18 @@ window.onload = function() {
             statusCount.style.display = 'none';
         }
 
-        if (selectedTrialStatus) {  // Update this block
+        if (selectedTrialStatus) {
             trialStatusCount.textContent = '{{ total_count }}';
             trialStatusCount.style.display = 'inline';
         } else {
             trialStatusCount.style.display = 'none';
+        }
+
+        if (selectedFirstCallStatus) {  // Add this block
+            firstCallStatusCount.textContent = '{{ total_count }}';
+            firstCallStatusCount.style.display = 'inline';
+        } else {
+            firstCallStatusCount.style.display = 'none';
         }
     }
 };
