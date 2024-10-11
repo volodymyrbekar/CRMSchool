@@ -83,9 +83,10 @@ class Student(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        center_students = Student.objects.filter(center=self.center).order_by('custom_id')
+        custom_id_to_delete = self.custom_id
+        super(Student, self).delete(*args, **kwargs)
+        center_students = Student.objects.filter(center=self.center, custom_id__gt=custom_id_to_delete).order_by(
+            'custom_id')
         for student in center_students:
-            if student.custom_id > self.custom_id:
-                student.custom_id -= 1
-                student.save(update_fields=['custom_id'])
-        super().delete(*args, **kwargs)
+            student.custom_id -= 1
+            student.save(update_fields=['custom_id'])

@@ -27,7 +27,7 @@ class CenterAdmin(admin.ModelAdmin):
 
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'order', 'student_full_name', 'student_phone_number', 'parent_phone_number', 'school',
+    list_display = ['id', 'order', 'custom_id', 'center', 'student_full_name', 'student_phone_number', 'parent_phone_number', 'school',
                     'class_number', ]
     ordering = ('order',)
     search_fields = ['student_full_name', 'student_phone_number', 'school']

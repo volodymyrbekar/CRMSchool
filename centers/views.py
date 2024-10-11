@@ -16,7 +16,7 @@ from users.models import CustomUser
 @login_required
 def centers_list_view(request):
     user = request.user
-    centers_obj = Center.objects.filter(customuser=user)
+    centers_obj = Center.objects.filter(customuser=user).order_by('created_at')
     context = {
         'title': 'Центри',
         'centers': centers_obj,

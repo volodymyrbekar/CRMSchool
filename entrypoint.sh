@@ -2,7 +2,6 @@
 
 python manage.py migrate --noinput
 python manage.py collectstatic --noinput
-python manage.py update_custom_id
 
 # Start the application using Gunicorn in production mode
 echo "Starting the application in production mode..."
