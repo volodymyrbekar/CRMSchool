@@ -62,18 +62,18 @@ class CreateStudentForm(forms.ModelForm):
         self.fields['class_number'].widget.attrs['class'] = 'form-control'
         self.fields['class_number'].widget.attrs['placeholder'] = 'Клас'
 
-    def clean(self):
-        optional_fields = ['first_call', 'first_call_status', 'trial_registration', 'comment_first_call',
-                           'second_call', 'second_call_status', 'add_to_group', 'comment_second_call']
-        data = self.cleaned_data
-        for field_name in optional_fields:
-            if field_name in data and not data[field_name]:
-                data[field_name] = ''
-        student_phone_number = data.get('student_full_name')
-        qs = Student.objects.filter(student_phone_number__icontains=student_phone_number)
-        if qs.exists():
-            self.add_error("student_phone_number", f'\"{student_phone_number}\" already in use.')
-        return data
+    # def clean(self):
+    #     optional_fields = ['first_call', 'first_call_status', 'trial_registration', 'comment_first_call',
+    #                        'second_call', 'second_call_status', 'add_to_group', 'comment_second_call']
+    #     data = self.cleaned_data
+    #     for field_name in optional_fields:
+    #         if field_name in data and not data[field_name]:
+    #             data[field_name] = ''
+    #     student_phone_number = data.get('student_full_name')
+    #     qs = Student.objects.filter(student_phone_number__icontains=student_phone_number)
+    #     if qs.exists():
+    #         self.add_error("student_phone_number", f'\"{student_phone_number}\" already in use.')
+    #     return data
 
 
 class UpdateStudentFirstForm(forms.ModelForm):
@@ -222,7 +222,6 @@ class UpdateStudentSecondForm(forms.ModelForm):
         data = super().clean()
         if self.errors:
             logger.error(f"Form validation errors: {self.errors}")
-
         return data
 
     def save(self, commit=True):
@@ -249,13 +248,13 @@ class CreateGroupTrialForm(forms.ModelForm):
         model = GroupTrial
         fields = ['group_name', 'center']
 
-    def clean(self):
-        data = self.cleaned_data
-        group_name = data.get('group_name')
-        qs = GroupTrial.objects.filter(group_name__icontains=group_name)
-        if qs.exists():
-            self.add_error("group_name", f'\"{group_name}\" already in use.')
-        return data
+    # def clean(self):
+    #     data = self.cleaned_data
+    #     group_name = data.get('group_name')
+    #     qs = GroupTrial.objects.filter(group_name__icontains=group_name)
+    #     if qs.exists():
+    #         self.add_error("group_name", f'\"{group_name}\" already in use.')
+    #     return data
 
 
 class CreateGroupForm(forms.ModelForm):
@@ -266,10 +265,10 @@ class CreateGroupForm(forms.ModelForm):
         model = GroupPermanent
         fields = ['group_name', 'center']
 
-    def clean(self):
-        data = self.cleaned_data
-        group_name = data.get('group_name')
-        qs = GroupPermanent.objects.filter(group_name__icontains=group_name)
-        if qs.exists():
-            self.add_error("group_name", f'\"{group_name}\" already in use.')
-        return data
+    # def clean(self):
+    #     data = self.cleaned_data
+    #     group_name = data.get('group_name')
+    #     qs = GroupPermanent.objects.filter(group_name__icontains=group_name)
+    #     if qs.exists():
+    #         self.add_error("group_name", f'\"{group_name}\" already in use.')
+    #     return data
