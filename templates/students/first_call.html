@@ -110,7 +110,7 @@
             {% if student_obj %}
                 {% for student in student_obj %}
                 <tr class="first-call-row active-row" data-operator="{{ student.first_call }}">
-                    <td>{{ student.order }}</td>
+                    <td>{{ student.custom_id }}</td>
                     <td>{{ student.student_full_name|default_if_none:"" }}</td>
                     <td>{{ student.student_phone_number|default_if_none:"" }}</td>
                     <td>{{ student.parent_phone_number|default_if_none:"" }}</td>

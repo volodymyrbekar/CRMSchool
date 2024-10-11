@@ -57,6 +57,7 @@ class Student(models.Model):
     class_number = models.PositiveIntegerField(default=1, choices=((i, i) for i in range(1, 12)))
     student_add_date = models.DateTimeField(auto_now_add=True)
     order = models.PositiveIntegerField(default=0)
+    custom_id = models.IntegerField(default=0)
 
     first_call = models.CharField(max_length=80, blank=True, null=True)
     first_call_status = models.CharField(max_length=80, blank=True, null=True, choices=CHOICES_FIRST_CALL_STATUS)
@@ -74,9 +75,17 @@ class Student(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:  # If the student is new
-            last_student = Student.objects.filter(center=self.center).order_by('order').last()
+            last_student = Student.objects.filter(center=self.center).order_by('custom_id').last()
             if last_student:
-                self.order = last_student.order + 1
+                self.custom_id = last_student.custom_id + 1
             else:
-                self.order = 1
+                self.custom_id = 1
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        center_students = Student.objects.filter(center=self.center).order_by('custom_id')
+        for student in center_students:
+            if student.custom_id > self.custom_id:
+                student.custom_id -= 1
+                student.save(update_fields=['custom_id'])
+        super().delete(*args, **kwargs)

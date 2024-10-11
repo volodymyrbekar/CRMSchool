@@ -127,7 +127,7 @@
       {% if student_obj and student_obj|length > 0 %}
         {% for student in student_obj %}
         <tr class="second-call-row" data-operator="{{ student.second_call }}">
-            <td>{{ student.order }}</td>
+            <td>{{ student.custom_id }}</td>
             <td>{{ student.student_full_name }}</td>
             <td>{{ student.student_phone_number }}</td>
             <td>{{ student.parent_phone_number }}</td>
