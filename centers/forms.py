@@ -26,7 +26,7 @@ class CreateCenterForm(forms.ModelForm):
 
 class CreateStudentForm(forms.ModelForm):
     student_full_name = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
-    student_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
+    student_phone_number = forms.CharField(required=False, max_length=50, widget=forms.TextInput())
     parent_phone_number = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
     parent_full_name = forms.CharField(required=False, max_length=50, widget=forms.TextInput())
     school = forms.CharField(required=True, max_length=50, widget=forms.TextInput())
