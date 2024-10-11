@@ -291,7 +291,7 @@ def group_detail_view(request, pk):
 def first_call_view(request, pk):
     try:
         center_obj = get_object_or_404(Center, pk=pk)
-        operators = CustomUser.objects.filter(role='operator')
+        operators = CustomUser.objects.all()
 
         selected_status = request.GET.get('status')
         selected_operator = request.GET.get('operator')
@@ -350,7 +350,7 @@ def first_call_view(request, pk):
 def second_call_view(request, pk):
     try:
         center_obj = Center.objects.get(pk=pk)
-        operators = CustomUser.objects.filter(role='operator')
+        operators = CustomUser.objects.all()
 
         selected_operator = request.GET.get('operator')
         selected_status = request.GET.get('status')
@@ -363,15 +363,12 @@ def second_call_view(request, pk):
         student_obj = Student.objects.filter(center=center_obj, first_call_status='Так, прийдуть на пробне').order_by('student_add_date')
         all_students = student_obj.count()
 
-        # Apply operator filter if selected
         if selected_operator:
             student_obj = student_obj.filter(second_call=selected_operator)
 
-        # Apply status filter if selected
         if selected_status:
             student_obj = student_obj.filter(second_call_status=selected_status)
 
-        # Apply add_to_group filter if selected
         if selected_add_to_group:
             student_obj = student_obj.filter(add_to_group=selected_add_to_group)
 
