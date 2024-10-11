@@ -355,6 +355,7 @@ def second_call_view(request, pk):
         selected_operator = request.GET.get('operator')
         selected_status = request.GET.get('status')
         selected_add_to_group = request.GET.get('add_to_group')
+        selected_trial_status = request.GET.get('trial_status')
 
         group_obj = GroupPermanent.objects.filter(center_id=pk).all()
 
@@ -372,6 +373,9 @@ def second_call_view(request, pk):
         # Apply add_to_group filter if selected
         if selected_add_to_group:
             student_obj = student_obj.filter(add_to_group=selected_add_to_group)
+
+        if selected_trial_status:
+            student_obj = student_obj.filter(trial_status=selected_trial_status)  # Add this line
 
         total_count = student_obj.count()
 
@@ -395,10 +399,12 @@ def second_call_view(request, pk):
         'selected_operator': selected_operator,
         'selected_status': selected_status,
         'selected_add_to_group': selected_add_to_group,
+        'selected_trial_status': selected_trial_status,
         'breadcrumbs': breadcrumbs,
         'total_count': total_count,
         'all_students': all_students,
         'group_obj': group_obj,
+        'trial_status_choices': CHOICES_TRIAL_STATUS,
     }
     return render(request, 'students/second_call.html', context)
 

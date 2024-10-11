@@ -58,6 +58,16 @@
             <span id="addToGroupCount" class="filter-count" style="display: none;">{{ total_count }}</span>
         </div>
 
+        <div class="btn-group">
+            <select id="trial-status-filter" class="form-control">
+                <option value="">Статус пробного</option>
+                {% for value, display in trial_status_choices %}
+                    <option value="{{ value }}" {% if selected_trial_status == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+            <span id="trialStatusCount" class="filter-count" style="display: none;">{{ total_count }}</span>
+        </div>
+
         <button id="clearFiltersBtn" class="clear-filters">Очистити Фільтри</button>
         <span class="bold-text">Всі учні - {{ all_students }}</span>
 
@@ -164,27 +174,27 @@
 window.onload = function() {
     var operatorDropdown = document.querySelector('#operatorDropdown');
     var statusFilter = document.querySelector('#status-filter');
-    var addToGroupFilter = document.querySelector('#add-to-group-filter');
+    var trialStatusFilter = document.querySelector('#trial-status-filter');  // Update this line
     var clearFiltersBtn = document.querySelector('#clearFiltersBtn');
     var operatorCount = document.querySelector('#operatorCount');
     var statusCount = document.querySelector('#statusCount');
-    var addToGroupCount = document.querySelector('#addToGroupCount');
+    var trialStatusCount = document.querySelector('#trialStatusCount');  // Update this line
 
     operatorDropdown.addEventListener('change', updateFilters);
     statusFilter.addEventListener('change', updateFilters);
-    addToGroupFilter.addEventListener('change', updateFilters);
+    trialStatusFilter.addEventListener('change', updateFilters);  // Update this line
     clearFiltersBtn.addEventListener('click', clearFilters);
 
     function updateFilters() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
-        var selectedAddToGroup = addToGroupFilter.value.trim();
+        var selectedTrialStatus = trialStatusFilter.value.trim();  // Update this line
 
         // Build the new URL with query parameters
         var url = new URL(window.location.href);
         url.searchParams.set('operator', operatorUsername);
         url.searchParams.set('status', selectedStatus);
-        url.searchParams.set('add_to_group', selectedAddToGroup);
+        url.searchParams.set('trial_status', selectedTrialStatus);  // Update this line
         url.searchParams.set('page', 1); // Always go to the first page
 
         // Redirect to the updated URL
@@ -195,15 +205,15 @@ window.onload = function() {
         // Clear the selections
         operatorDropdown.selectedIndex = 0;
         statusFilter.selectedIndex = 0;
-        addToGroupFilter.selectedIndex = 0;
+        trialStatusFilter.selectedIndex = 0;  // Update this line
         operatorCount.style.display = 'none';
         statusCount.style.display = 'none';
-        addToGroupCount.style.display = 'none';
+        trialStatusCount.style.display = 'none';  // Update this line
 
         var url = new URL(window.location.href);
         url.searchParams.delete('operator');
         url.searchParams.delete('status');
-        url.searchParams.delete('add_to_group');
+        url.searchParams.delete('trial_status');  // Update this line
         url.searchParams.set('page', 1);
 
         window.location.href = url.toString();
@@ -215,7 +225,7 @@ window.onload = function() {
     function updateCounts() {
         var operatorUsername = operatorDropdown.value.trim();
         var selectedStatus = statusFilter.value.trim();
-        var selectedAddToGroup = addToGroupFilter.value.trim();
+        var selectedTrialStatus = trialStatusFilter.value.trim();  // Update this line
 
         if (operatorUsername) {
             operatorCount.textContent = '{{ total_count }}';
@@ -231,11 +241,11 @@ window.onload = function() {
             statusCount.style.display = 'none';
         }
 
-        if (selectedAddToGroup) {
-            addToGroupCount.textContent = '{{ total_count }}';
-            addToGroupCount.style.display = 'inline';
+        if (selectedTrialStatus) {  // Update this block
+            trialStatusCount.textContent = '{{ total_count }}';
+            trialStatusCount.style.display = 'inline';
         } else {
-            addToGroupCount.style.display = 'none';
+            trialStatusCount.style.display = 'none';
         }
     }
 };
